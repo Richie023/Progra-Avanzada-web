@@ -26,24 +26,16 @@
         <div class="az-card-signin">
             <a  asp-area="" asp-controller="Home" asp-action="Index"><h1 class="az-logo">Flexigym</h1></a> 
             <div class="az-signin-header">
-                <h2>Bienvenido</h2>
-                <h4>Inicie sesión para continuar</h4>
-
-                <form action="@Url.Action("Index", "Home")">
+                <form >
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="text" class="form-control" placeholder="Ingrese su correo" value="">
+                        <input type="text" class="form-control" placeholder="Ingrese su correo para recuperación" value="">
                     </div>
-                    <div class="form-group">
-                        <label>Contraseña</label>
-                        <input type="password" class="form-control" placeholder="Ingrese su contraseña" value="">
-                    </div>
-                    <button class="btn btn-az-primary btn-block">Iniciar sesión</button>
+                    <button class="btn btn-az-primary btn-block">Enviar correo</button>
                 </form>
             </div>
             <div class="az-signin-footer">
-                <p><a asp-area="" asp-controller="Home" asp-action="Recovery">Olvido su contraseña?</a></p>
-                <p>No tienes una cuenta? <a asp-area="" asp-controller="Home" asp-action="Register"> Crear cuenta</a></p>
+                <p>Nuevo en Flexigym? <a asp-area="" asp-controller="Home" asp-action="Login"> Iniciar sesión</a></p>
             </div>
         </div>
     </div>

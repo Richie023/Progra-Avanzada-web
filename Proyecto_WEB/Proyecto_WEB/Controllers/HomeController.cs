@@ -18,7 +18,11 @@ namespace Proyecto_WEB.Controllers
             return View();
         }
 
-        public IActionResult Registrar()
+        public IActionResult Register()
+        {
+            return View();
+        }
+        public IActionResult Recovery() 
         {
             return View();
         }
