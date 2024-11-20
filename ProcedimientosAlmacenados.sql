@@ -1,21 +1,19 @@
 CREATE PROCEDURE [dbo].[CrearCliente]
     @Username VARCHAR(8),
     @Contrasenna VARCHAR(10),
-    @Activo BIT = 1,
-    @ClaveTemp BIT = 0,
-    @Vigencia DATETIME ,
     @Nombre VARCHAR(50),
     @Apellidos VARCHAR(50),
-    @FechaNacimiento DATE,
+    @FechaNacimiento DATETIME,
     @Genero CHAR(1),
     @Telefono INT,
     @Email VARCHAR(20) = NULL,
-    @Direccion VARCHAR(255) = NULL,
-    @MembresiaID INT,
-    @ClaseID INT
+    @Direccion VARCHAR(255) = NULL
 AS
 BEGIN
+	DECLARE @Activo BIT = 1 --
+	DECLARE @ClaveTemp BIT = 0 -- Sin clave
     DECLARE @RolID INT = 3  -- Rol Cliente
+    DECLARE @MembresiaID INT = 1 -- Id de la membresia
     DECLARE @NuevoUsuarioID BIGINT
 
     BEGIN TRY
@@ -38,8 +36,8 @@ BEGIN
         END
 
         -- Insertar nuevo miembro
-        INSERT INTO dbo.Miembro (UsuarioID, Nombre, Apellidos, FechaNacimiento, Genero, Telefono, Email, Direccion, FechaRegistro, MembresiaID, ClaseID)
-        VALUES (@NuevoUsuarioID, @Nombre, @Apellidos, @FechaNacimiento, @Genero, @Telefono, @Email, @Direccion, GETDATE(), @MembresiaID, @ClaseID)
+        INSERT INTO dbo.Miembro (UsuarioID, Nombre, Apellidos, FechaNacimiento, Genero, Telefono, Email, Direccion, FechaRegistro, MembresiaID)
+        VALUES (@NuevoUsuarioID, @Nombre, @Apellidos, @FechaNacimiento, @Genero, @Telefono, @Email, @Direccion, GETDATE(), @MembresiaID)
 
         COMMIT TRANSACTION
     END TRY
@@ -52,3 +50,28 @@ BEGIN
 END
 GO
 
+
+
+CREATE PROCEDURE [dbo].[IniciarSesion]
+	@Username varchar(80),
+	@Contrasenna varchar(255)
+AS
+BEGIN
+	SELECT	UsuarioID ,
+			Username , 
+			Activo ,
+			ClaveTemp ,
+			Vigencia ,
+			NombreRol
+	  FROM	dbo.Usuario U
+	  INNER JOIN dbo.Rol R ON U.RolID = R.RolID
+	  WHERE Username = @Username
+		AND Contrasenna = @Contrasenna
+		AND Activo = 1
+END
+GO
+
+
+DELETE FROM Miembro;
+
+DELETE FROM Usuario;

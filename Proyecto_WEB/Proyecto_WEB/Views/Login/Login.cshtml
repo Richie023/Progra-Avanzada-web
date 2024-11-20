@@ -1,0 +1,34 @@
+﻿@model Proyecto_WEB.Models.Usuario
+@{
+    ViewData["Title"] = "Login Page";
+    Layout = "~/Views/Shared/_LayoutExterno.cshtml";
+}
+
+
+<div class="az-body">
+    <div class="az-signin-wrapper">
+        <div class="az-card-signin">
+            <a  asp-area="" asp-controller="Home" asp-action="Index"><h1 class="az-logo">Flexigym</h1></a> 
+            <div class="az-signin-header">
+                <h2>Bienvenido</h2>
+                <h4>Inicie sesión para continuar</h4>
+
+                <form asp-action="Login" asp-controller="Login">
+                    <div class="form-group">
+                        <label>Usuario</label>
+                        <input type="text" asp-for="Username" class="form-control" placeholder="Ingrese su nombre de usuario">
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" asp-for="Contrasenna" class="form-control" placeholder="Ingrese su contraseña">
+                    </div>
+                    <button type="submit" class="btn btn-az-primary btn-block">Iniciar sesión</button>
+                </form>
+            </div>
+            <div class="az-signin-footer">
+                <p><a asp-area="" asp-controller="Login" asp-action="Recovery">Olvido su contraseña?</a></p>
+                <p>No tienes una cuenta? <a asp-area="" asp-controller="Login" asp-action="Register"> Crear cuenta</a></p>
+            </div>
+        </div>
+    </div>
+</div>

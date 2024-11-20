@@ -13,19 +13,7 @@ namespace Proyecto_WEB.Controllers
             return View();
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        public IActionResult Register()
-        {
-            return View();
-        }
-        public IActionResult Recovery() 
-        {
-            return View();
-        }
+   
 
         
     }

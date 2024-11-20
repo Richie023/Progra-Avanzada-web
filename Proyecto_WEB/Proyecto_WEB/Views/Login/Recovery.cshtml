@@ -3,25 +3,7 @@
     Layout = "~/Views/Shared/_LayoutExterno.cshtml";
 }
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-    <title>Login</title>
-
-
-    <link href="~/pages/css/all.min.css" rel="stylesheet">
-    <link href="~/pages/ionicons/css/ionicons.min.css" rel="stylesheet">
-    <link href="~/pages/typicons.font/typicons.css" rel="stylesheet">
-
-
-    <link rel="stylesheet" href="~/pages/css/azia.css">
-
-</head>
-<body class="az-body">
-
-
+<div class="az-body">
     <div class="az-signin-wrapper">
         <div class="az-card-signin">
             <a  asp-area="" asp-controller="Home" asp-action="Index"><h1 class="az-logo">Flexigym</h1></a> 
@@ -35,7 +17,7 @@
                 </form>
             </div>
             <div class="az-signin-footer">
-                <p>Nuevo en Flexigym? <a asp-area="" asp-controller="Home" asp-action="Login"> Iniciar sesión</a></p>
+                <p>Nuevo en Flexigym? <a asp-area="" asp-controller="Login" asp-action="Register">Registrarme</a></p>
             </div>
         </div>
     </div>
@@ -46,5 +28,4 @@
 
     <script src="~/pages/js/azia.js"></script>
 
-</body>
-</html>
+</div>
