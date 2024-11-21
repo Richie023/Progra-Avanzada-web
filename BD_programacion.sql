@@ -45,7 +45,10 @@ CREATE TABLE Empleado (
 
 CREATE TABLE Membresia (
 	MembresiaID INT PRIMARY KEY IDENTITY  (1,1) ,
-	TipoMembresia VARCHAR (20)
+	TipoMembresia VARCHAR (20),
+	Precio DECIMAL(10, 2) NOT NULL,
+    Duracion NVARCHAR(50) NOT NULL,
+    Beneficios NVARCHAR(MAX) NOT NULL
 );
 
 CREATE TABLE Clases (
