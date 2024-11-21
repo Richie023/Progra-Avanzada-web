@@ -32,7 +32,7 @@ namespace Proyecto_WEB.Controllers
             {
                 var url = _conf.GetSection("Variables:UrlApi").Value + "Login/IniciarSesion";
 
-                //model.Contrasenna = Encrypt(model.Contrasenna);
+                model.Contrasenna = Encrypt(model.Contrasenna);
                 JsonContent datos = JsonContent.Create(model);
 
                 var response = client.PostAsync(url, datos).Result;

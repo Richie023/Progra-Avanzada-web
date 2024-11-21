@@ -4,16 +4,13 @@
 }
 
 <div class="text-center">
-   
     <h1 class="display-4">¡Bienvenido!</h1>
-
     <p style="font-size: 1.25rem; padding: 10px;">
         ¡Ponte en forma con nuestro gimnasio! En flexigym, estamos comprometidos a ayudarte a alcanzar tus metas de fitness de manera segura y efectiva. Ofrecemos una amplia gama de servicios diseñados para todas las edades y niveles de condición física.
-
         Nuestro equipo de entrenadores certificados está aquí para guiarte en cada paso del camino. Desde clases grupales emocionantes hasta entrenamientos personalizados, tenemos todo lo que necesitas para sentirte fuerte, saludable y enérgico.
     </p>
+</div>
 
-    </div>
 <div class="row mt-5">
     <div class="col-md-4 mb-4">
         <div class="card h-80">
@@ -47,4 +44,26 @@
     </div>
 </div>
 
+
+<div class="row mt-5">
+    <div class="col-md-6 mb-4">
+        <div class="card h-80">
+            <img src="/pages/img/registrar_empleado.jpg" class="card-img-top" alt="Registrar Empleado">
+            <div class="card-body">
+                <h5 class="card-title">Registrar Empleado</h5>
+                <p class="card-text">Agrega nuevos empleados al sistema y mantén la información actualizada.</p>
+                <a asp-controller="Empleado" asp-action="RegEmpleados" class="btn btn-primary">Registrar Empleado</a>
+            </div>
+        </div>
     </div>
+    <div class="col-md-6 mb-4">
+        <div class="card h-80">
+            <img src="/pages/img/listar_empleados.jpg" class="card-img-top" alt="Listar Empleados">
+            <div class="card-body">
+                <h5 class="card-title">Listar Empleados</h5>
+                <p class="card-text">Consulta la lista de empleados registrados y su información relevante.</p>
+                <a asp-controller="Empleado" asp-action="ListEmpleados" class="btn btn-primary">Ver Empleados</a>
+            </div>
+        </div>
+    </div>
+</div>

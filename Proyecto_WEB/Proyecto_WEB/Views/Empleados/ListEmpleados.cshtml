@@ -1,0 +1,27 @@
+﻿@model List<Proyecto_WEB.Models.Empleado>
+
+<h1>Empleados</h1>
+<a asp-action="Crear" class="btn btn-primary">Registrar Empleado</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Dirección</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var empleado in Model)
+        {
+            <tr>
+                <td>@empleado.Nombre</td>
+                <td>@empleado.Apellidos</td>
+                <td>@empleado.Telefono</td>
+                <td>@empleado.Email</td>
+                <td>@empleado.Direccion</td>
+            </tr>
+        }
+    </tbody>
+</table>
