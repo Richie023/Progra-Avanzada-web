@@ -84,11 +84,19 @@
                                 <h6>John Doe</h6>
                                 <span>Premium Member</span>
                             </div>
-                            <a href="#" class="dropdown-item"><i class="typcn typcn-user-outline"></i> Mi Perfil</a>
-                            <a href="#" class="dropdown-item"><i class="typcn typcn-edit"></i> Editar perfil</a>
-                            <a href="#" class="dropdown-item"><i class="typcn typcn-time"></i> Activity Logs</a>
-                            <a href="#" class="dropdown-item"><i class="typcn typcn-cog-outline"></i> Configuración de Cuenta</a>
-                            <a href="@Url.Action("Login", "Login")" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Iniciar sesión</a>
+
+                                @if (Context.Session.GetString("NombreUsuario") != null)
+                                {
+                                    <a href="#" class="dropdown-item"><i class="typcn typcn-user-outline"></i> Mi Perfil</a>
+                                    <a href="#" class="dropdown-item"><i class="typcn typcn-edit"></i> Editar perfil</a>
+                                    <a href="#" class="dropdown-item"><i class="typcn typcn-time"></i> Activity Logs</a>
+                                    <a href="#" class="dropdown-item"><i class="typcn typcn-cog-outline"></i> Configuración de Cuenta</a>
+                                    <a href="@Url.Action("Logout", "Login")" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Cerrar sesión</a>
+                                }
+                                else
+                                {
+                                <a href="@Url.Action("Login", "Login")" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Iniciar sesión</a>
+                                }
                         </div>
                     </div>
                 </div>

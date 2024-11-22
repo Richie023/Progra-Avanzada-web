@@ -44,6 +44,7 @@ namespace Proyecto_WEB.Controllers
 
                     HttpContext.Session.SetString("Consecutivo", datosUsuario!.UsuarioID.ToString());
                     HttpContext.Session.SetString("NombreUsuario", datosUsuario!.Username);
+                    HttpContext.Session.SetString("Rol", datosUsuario!.NombreRol);
                     return RedirectToAction("Index", "Home");   
                 }
                 else
@@ -53,11 +54,42 @@ namespace Proyecto_WEB.Controllers
                 }
             }
         }
-
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Inicio", "Home");
+        }
         public IActionResult Register()
         {
             return View();
         }
+
+        [HttpPost]
+        public IActionResult Register(Cliente model)
+        {
+            using (var client = _http.CreateClient())
+            {
+                var url = _conf.GetSection("Variables:UrlApi").Value + "Login/CrearCliente";
+
+                model.Contrasenna = Encrypt(model.Contrasenna);
+                JsonContent datos = JsonContent.Create(model);
+
+                var response = client.PostAsync(url, datos).Result;
+                var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;
+
+                if (result != null && result.Codigo == 0)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+                else
+                {
+                    ViewBag.Mensaje = result!.Mensaje;
+                    return View();
+                }
+            }
+        }
+
         public IActionResult Recovery()
         {
             return View();
@@ -71,6 +103,8 @@ namespace Proyecto_WEB.Controllers
 
             using (Aes aes = Aes.Create())
             {
+                
+                
                 aes.Key = Encoding.UTF8.GetBytes(_conf.GetSection("Variables:Llave").Value!);
                 aes.IV = iv;
 
