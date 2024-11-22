@@ -35,12 +35,13 @@ CREATE TABLE Empleado (
 	Apellidos VARCHAR (50) NOT NULL,
     FechaNacimiento DATETIME NOT NULL,
     Telefono INT NOT NULL ,
-	Email VARCHAR (20) ,
+	Email VARCHAR (30) ,
 	Direccion VARCHAR (255) ,
 	FechaContratacion DATE NOT NULL,
     CargoID INT ,
 	FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID),
 	FOREIGN KEY (CargoID) References Cargo (CargoID)
+    
 );
 
 CREATE TABLE Membresia (
@@ -84,7 +85,6 @@ CREATE TABLE MiembroClase (
 	FOREIGN KEY (MiembroID) REFERENCES Miembro(MiembroID),
 	FOREIGN KEY (ClaseID) REFERENCES Clases(ClaseID)
 );
-
 
 CREATE TABLE Equipos (
     EquipoID INT PRIMARY KEY IDENTITY (1,1),
@@ -139,9 +139,18 @@ INSERT INTO Rol (NombreRol) VALUES ('Empleado');
 INSERT INTO Rol (NombreRol) VALUES ('Cliente');
 GO
 
+INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
+VALUES ('usuario1', 'P123', 1, 0, GETDATE(), 2);
+GO
+
+INSERT INTO Cargo (NombreCargo)
+VALUES ('Entrenador');
+GO
+
 INSERT INTO Membresia (TipoMembresia, Precio, Duracion, Beneficios) 
 VALUES 
-('Sin membresia', 0.00, 'N/A', 'Acceso limitado a servicios básicos'),
-('Regular', 50.00, '1 mes', 'Acceso a gimnasio, clases grupales estándar'),
-('Premium', 100.00, '1 mes', 'Acceso a todas las áreas, clases premium, sesiones con entrenador personal');
+('Sin membresia', 0.00, 'N/A', 'Acceso limitado a servicios b?sicos'),
+('Regular', 50.00, '1 mes', 'Acceso a gimnasio, clases grupales est?ndar'),
+('Premium', 100.00, '1 mes', 'Acceso a todas las ?reas, clases premium, sesiones con entrenador personal');
 GO
+

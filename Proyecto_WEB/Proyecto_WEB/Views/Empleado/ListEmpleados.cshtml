@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Proyecto_WEB.Models.Empleado>
+
+<h1>Lista de Empleados</h1>
+
+@if (!Model.Any())
+{
+    <p>No hay empleados registrados.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Fecha Nacimiento</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Dirección</th>
+                <th>Fecha Contratación</th>
+                <th>Cargo ID</th>
+                <th>Usuario ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var empleado in Model)
+            {
+                <tr>
+                    <td>@empleado.Nombre</td>
+                    <td>@empleado.Apellidos</td>
+                    <td>@empleado.FechaNacimiento.ToShortDateString()</td>
+                    <td>@empleado.Telefono</td>
+                    <td>@empleado.Email</td>
+                    <td>@empleado.Direccion</td>
+                    <td>@empleado.FechaContratacion.ToShortDateString()</td>
+                    <td>@empleado.CargoID</td>
+                    <td>@empleado.UsuarioID</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
