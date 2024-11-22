@@ -10,10 +10,10 @@ CREATE PROCEDURE [dbo].[CrearCliente]
     @Direccion VARCHAR(255) = NULL
 AS
 BEGIN
-	DECLARE @Activo BIT = 1 --
-	DECLARE @ClaveTemp BIT = 0 -- Sin clave
-    DECLARE @RolID INT = 3  -- Rol Cliente
-    DECLARE @MembresiaID INT = 1 -- Id de la membresia
+	DECLARE @Activo BIT = 1
+	DECLARE @ClaveTemp BIT = 0
+    DECLARE @RolID INT = 3
+    DECLARE @MembresiaID INT = 1
     DECLARE @NuevoUsuarioID BIGINT
 
     BEGIN TRY
@@ -24,18 +24,15 @@ BEGIN
             INSERT INTO dbo.Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
             VALUES (@Username, @Contrasenna, @Activo, @ClaveTemp, GETDATE(), @RolID)
             
-            -- Se obtiene el ID del usuario creado
             SET @NuevoUsuarioID = SCOPE_IDENTITY()
         END
         ELSE
         BEGIN
-            -- Manejar el caso en el que el usuario ya existe
             PRINT 'Nombre de usuario en Uso'
             ROLLBACK TRANSACTION
             RETURN
         END
 
-        -- Insertar nuevo miembro
         INSERT INTO dbo.Miembro (UsuarioID, Nombre, Apellidos, FechaNacimiento, Genero, Telefono, Email, Direccion, FechaRegistro, MembresiaID)
         VALUES (@NuevoUsuarioID, @Nombre, @Apellidos, @FechaNacimiento, @Genero, @Telefono, @Email, @Direccion, GETDATE(), @MembresiaID)
 
@@ -49,8 +46,6 @@ BEGIN
     END CATCH
 END
 GO
-
-
 
 CREATE PROCEDURE [dbo].[IniciarSesion]
 	@Username varchar(80),

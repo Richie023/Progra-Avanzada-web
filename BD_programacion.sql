@@ -44,8 +44,11 @@ CREATE TABLE Empleado (
 );
 
 CREATE TABLE Membresia (
-	MembresiaID INT PRIMARY KEY IDENTITY  (1,1) ,
-	TipoMembresia VARCHAR (20)
+	MembresiaID INT PRIMARY KEY IDENTITY  (1,1),
+	TipoMembresia VARCHAR (20),
+	Precio DECIMAL(10, 2) NOT NULL,
+    Duracion NVARCHAR(50) NOT NULL,
+    Beneficios NVARCHAR(MAX) NOT NULL
 );
 
 CREATE TABLE Clases (
@@ -82,7 +85,6 @@ CREATE TABLE MiembroClase (
 	FOREIGN KEY (MiembroID) REFERENCES Miembro(MiembroID),
 	FOREIGN KEY (ClaseID) REFERENCES Clases(ClaseID)
 );
-
 
 CREATE TABLE Equipos (
     EquipoID INT PRIMARY KEY IDENTITY (1,1),
@@ -122,6 +124,16 @@ CREATE TABLE Errores (
     FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID)
 );
 
+CREATE TABLE PlanEntrenamiento (
+    PlanEntrenamientoID INT PRIMARY KEY IDENTITY,
+    UsuarioID BIGINT NOT NULL,
+    Ejercicio NVARCHAR(100) NOT NULL,
+    Repeticiones INT NOT NULL,
+    Peso DECIMAL(5,2) NOT NULL,
+    Fecha DATE NOT NULL,
+    FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID)
+);
+
 INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
 VALUES ('usuario1', 'P123', 1, 0, GETDATE(), 2);
 
@@ -135,8 +147,10 @@ INSERT INTO Rol (NombreRol) VALUES ('Cliente');
 GO
 
 
-INSERT INTO Membresia (TipoMembresia) VALUES ('Sin membresia');
-INSERT INTO Membresia (TipoMembresia) VALUES ('Regular');
-INSERT INTO Membresia (TipoMembresia) VALUES ('Premium');
+INSERT INTO Membresia (TipoMembresia, Precio, Duracion, Beneficios) 
+VALUES 
+('Sin membresia', 0.00, 'N/A', 'Acceso limitado a servicios b?sicos'),
+('Regular', 50.00, '1 mes', 'Acceso a gimnasio, clases grupales est?ndar'),
+('Premium', 100.00, '1 mes', 'Acceso a todas las ?reas, clases premium, sesiones con entrenador personal');
 GO
 
