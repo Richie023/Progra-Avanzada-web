@@ -16,13 +16,13 @@ namespace Proyecto_API.Controllers
             _conf = conf;
         }
 
-        [HttpPost]
-        [Route("Registrar")]
+        [HttpPost("Registrar")]
         public IActionResult RegistrarEmpleado(Empleado model)
         {
-            using (var context = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
+            using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
             {
-                var result = context.Execute("RegistrarEmpleado", new
+                // Ejecuta el procedimiento almacenado para registrar un empleado
+                var result = connection.Execute("RegistrarEmpleado", new
                 {
                     model.Nombre,
                     model.Apellidos,
@@ -35,8 +35,26 @@ namespace Proyecto_API.Controllers
                     model.UsuarioID
                 }, commandType: System.Data.CommandType.StoredProcedure);
 
-                return Ok(new { Codigo = result > 0 ? 0 : -1 });
+                if (result > 0)
+                {
+                    return Ok(new { Message = "Empleado registrado correctamente" });
+                }
+                else
+                {
+                    return BadRequest(new { Message = "No se pudo registrar el empleado" });
+                }
             }
         }
+
+        [HttpGet("Listar")]
+        public IActionResult ListarEmpleados()
+        {
+            using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
+            {
+                var empleados = connection.Query<Empleado>("SELECT * FROM Empleado");
+                return Ok(empleados);
+            }
+        }
+
     }
 }
