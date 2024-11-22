@@ -1,0 +1,44 @@
+﻿@model List<Proyecto_WEB.Models.Membresia>
+
+@{
+    ViewData["Title"] = "Membresías";
+}
+
+<h2>Membresías</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="row">
+    @foreach (var membresia in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-80">
+                @if (membresia.MembresiaID == 1)
+                {
+                    <img src="/images/sinMembresia.jpg" class="card-img-top" alt="Sin Membresia">
+                }
+                else if (membresia.MembresiaID == 2)
+                {
+                    <img src="/images/regular.jpg" class="card-img-top" alt="Regular">
+                }
+                else if (membresia.MembresiaID == 3)
+                {
+                    <img src="/images/premium.jpg" class="card-img-top" alt="Premium">
+                }
+
+                <div class="card-body">
+                    <h5 class="card-title">@membresia.TipoMembresia</h5>
+                    <p class="card-text">
+                        Precio: $@membresia.Precio <br />
+                        Duración: @membresia.Duracion <br />
+                        Beneficios: @membresia.Beneficios
+                    </p>
+                    <a href="#" class="btn btn-primary">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
