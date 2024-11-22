@@ -71,6 +71,22 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE RegistrarEmpleado
+    @Nombre NVARCHAR(100),
+    @Apellidos NVARCHAR(100),
+    @FechaNacimiento DATE,
+    @Telefono INT,
+    @Email NVARCHAR(100),
+    @Direccion NVARCHAR(255),
+    @FechaContratacion DATE,
+    @CargoID INT,
+    @UsuarioID BIGINT
+AS
+BEGIN
+    INSERT INTO Empleado (Nombre, Apellidos, FechaNacimiento, Telefono, Email, Direccion, FechaContratacion, CargoID, UsuarioID)
+    VALUES (@Nombre, @Apellidos, @FechaNacimiento, @Telefono, @Email, @Direccion, @FechaContratacion, @CargoID, @UsuarioID);
+END;
+
 
 DELETE FROM Miembro;
 

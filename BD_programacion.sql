@@ -11,7 +11,6 @@ CREATE TABLE Rol (
 RolID INT PRIMARY KEY IDENTITY (1,1) ,
 NombreRol VARCHAR (20) NOT NULL 
 );
-
 CREATE TABLE Usuario (
 	UsuarioID BIGINT PRIMARY KEY IDENTITY (1,1) ,
 	Username  VARCHAR (8) NOT NULL UNIQUE ,
@@ -35,20 +34,18 @@ CREATE TABLE Empleado (
 	Apellidos VARCHAR (50) NOT NULL,
     FechaNacimiento DATETIME NOT NULL,
     Telefono INT NOT NULL ,
-	Email VARCHAR (20) ,
+	Email VARCHAR (30) ,
 	Direccion VARCHAR (255) ,
 	FechaContratacion DATE NOT NULL,
     CargoID INT ,
 	FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID),
 	FOREIGN KEY (CargoID) References Cargo (CargoID)
+    
 );
 
 CREATE TABLE Membresia (
-	MembresiaID INT PRIMARY KEY IDENTITY  (1,1),
-	TipoMembresia VARCHAR (20),
-	Precio DECIMAL(10, 2) NOT NULL,
-    Duracion NVARCHAR(50) NOT NULL,
-    Beneficios NVARCHAR(MAX) NOT NULL
+	MembresiaID INT PRIMARY KEY IDENTITY  (1,1) ,
+	TipoMembresia VARCHAR (20)
 );
 
 CREATE TABLE Clases (
@@ -75,6 +72,7 @@ CREATE TABLE Miembro (
 	MembresiaID INT NOT NULL ,
 	FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID),
 	FOREIGN KEY (MembresiaID) References Membresia (MembresiaID),
+
 );
 
 CREATE TABLE MiembroClase (
@@ -124,24 +122,21 @@ CREATE TABLE Errores (
     FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID)
 );
 
-CREATE TABLE PlanEntrenamiento (
-    PlanEntrenamientoID INT PRIMARY KEY IDENTITY,
-    UsuarioID BIGINT NOT NULL,
-    Ejercicio NVARCHAR(100) NOT NULL,
-    Repeticiones INT NOT NULL,
-    Peso DECIMAL(5,2) NOT NULL,
-    Fecha DATE NOT NULL,
-    FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID)
-);
+INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
+VALUES ('usuario1', 'P123', 1, 0, GETDATE(), 2);
+
+INSERT INTO Cargo (NombreCargo)
+VALUES ('Entrenador');
+
 
 INSERT INTO Rol (NombreRol) VALUES ('Administrador');
 INSERT INTO Rol (NombreRol) VALUES ('Empleado');
 INSERT INTO Rol (NombreRol) VALUES ('Cliente');
 GO
 
-INSERT INTO Membresia (TipoMembresia, Precio, Duracion, Beneficios) 
-VALUES 
-('Sin membresia', 0.00, 'N/A', 'Acceso limitado a servicios básicos'),
-('Regular', 50.00, '1 mes', 'Acceso a gimnasio, clases grupales estándar'),
-('Premium', 100.00, '1 mes', 'Acceso a todas las áreas, clases premium, sesiones con entrenador personal');
+
+INSERT INTO Membresia (TipoMembresia) VALUES ('Sin membresia');
+INSERT INTO Membresia (TipoMembresia) VALUES ('Regular');
+INSERT INTO Membresia (TipoMembresia) VALUES ('Premium');
 GO
+
