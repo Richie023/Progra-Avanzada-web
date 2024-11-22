@@ -11,6 +11,7 @@ CREATE TABLE Rol (
 RolID INT PRIMARY KEY IDENTITY (1,1) ,
 NombreRol VARCHAR (20) NOT NULL 
 );
+
 CREATE TABLE Usuario (
 	UsuarioID BIGINT PRIMARY KEY IDENTITY (1,1) ,
 	Username  VARCHAR (8) NOT NULL UNIQUE ,
@@ -75,7 +76,6 @@ CREATE TABLE Miembro (
 	MembresiaID INT NOT NULL ,
 	FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID),
 	FOREIGN KEY (MembresiaID) References Membresia (MembresiaID),
-
 );
 
 CREATE TABLE MiembroClase (
@@ -134,18 +134,18 @@ CREATE TABLE PlanEntrenamiento (
     FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID)
 );
 
-INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
-VALUES ('usuario1', 'P123', 1, 0, GETDATE(), 2);
-
-INSERT INTO Cargo (NombreCargo)
-VALUES ('Entrenador');
-
-
 INSERT INTO Rol (NombreRol) VALUES ('Administrador');
 INSERT INTO Rol (NombreRol) VALUES ('Empleado');
 INSERT INTO Rol (NombreRol) VALUES ('Cliente');
 GO
 
+INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
+VALUES ('usuario1', 'P123', 1, 0, GETDATE(), 2);
+GO
+
+INSERT INTO Cargo (NombreCargo)
+VALUES ('Entrenador');
+GO
 
 INSERT INTO Membresia (TipoMembresia, Precio, Duracion, Beneficios) 
 VALUES 

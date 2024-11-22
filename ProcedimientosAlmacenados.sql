@@ -81,8 +81,8 @@ BEGIN
     INSERT INTO Empleado (Nombre, Apellidos, FechaNacimiento, Telefono, Email, Direccion, FechaContratacion, CargoID, UsuarioID)
     VALUES (@Nombre, @Apellidos, @FechaNacimiento, @Telefono, @Email, @Direccion, @FechaContratacion, @CargoID, @UsuarioID);
 END;
+GO
 
 
 DELETE FROM Miembro;
-
 DELETE FROM Usuario;

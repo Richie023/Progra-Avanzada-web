@@ -7,11 +7,11 @@ namespace Proyecto_WEB.Controllers
     public class MembresiasController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly string _urlApi = "https://localhost:7179/api/Membresias/ObtenerMembresias";
+        private readonly string _urlApi = "https://localhost:5001/api/Membresias/ObtenerMembresias";
 
         public MembresiasController(IConfiguration configuration)
         {
-            _urlApi = configuration["Variables:UrlApi"] ?? "https://localhost:7179/api/";
+            _urlApi = configuration["Variables:UrlApi"] ?? "https://localhost:5001/api/";
             _httpClient = new HttpClient
             {
                 BaseAddress = new Uri(_urlApi)

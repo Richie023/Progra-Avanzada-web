@@ -21,7 +21,6 @@ namespace Proyecto_API.Controllers
         {
             using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
             {
-                // Ejecuta el procedimiento almacenado para registrar un empleado
                 var result = connection.Execute("RegistrarEmpleado", new
                 {
                     model.Nombre,
