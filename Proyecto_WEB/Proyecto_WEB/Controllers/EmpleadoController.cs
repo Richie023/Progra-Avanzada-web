@@ -52,7 +52,7 @@ namespace Proyecto_WEB.Controllers
         {
             using (var client = _httpClientFactory.CreateClient())
             {
-                client.BaseAddress = new Uri("https://localhost:7179/api/"); // URL de tu API
+                client.BaseAddress = new Uri("https://localhost:5001/api/"); // URL de tu API
 
                 // Llamada a la API para obtener la lista de empleados
                 var response = await client.GetAsync("Empleado/Listar");
