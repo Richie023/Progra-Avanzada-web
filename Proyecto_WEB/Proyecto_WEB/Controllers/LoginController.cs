@@ -38,14 +38,23 @@ namespace Proyecto_WEB.Controllers
                 var response = client.PostAsync(url, datos).Result;
                 var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;
 
+              
                 if (result != null && result.Codigo == 0)
                 {
                     var datosUsuario = JsonSerializer.Deserialize<Usuario>((JsonElement)result.Contenido!);
-
-                    HttpContext.Session.SetString("Consecutivo", datosUsuario!.UsuarioID.ToString());
-                    HttpContext.Session.SetString("NombreUsuario", datosUsuario!.Username);
-                    HttpContext.Session.SetString("Rol", datosUsuario!.NombreRol);
-                    return RedirectToAction("Index", "Home");   
+                    if (datosUsuario.ClaveTemp == true)
+                    {
+                        HttpContext.Session.SetString("Consecutivo", datosUsuario!.UsuarioID.ToString());
+                        return RedirectToAction("ChangePassword", "Login");
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetString("Consecutivo", datosUsuario!.UsuarioID.ToString());
+                        HttpContext.Session.SetString("NombreUsuario", datosUsuario!.Username);
+                        HttpContext.Session.SetString("Rol", datosUsuario!.NombreRol);
+                        return RedirectToAction("Index", "Home");
+                    }
+                   
                 }
                 else
                 {
@@ -58,7 +67,7 @@ namespace Proyecto_WEB.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("Inicio", "Home");
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult Register()
         {
@@ -94,8 +103,73 @@ namespace Proyecto_WEB.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Recovery(Usuario model)
+        {
+            using (var client = _http.CreateClient())
+            {
+                var url = _conf.GetSection("Variables:UrlApi").Value + "Login/RecuperarAcceso";
 
+                JsonContent datos = JsonContent.Create(model.Email);
 
+                var response = client.PostAsync(url, datos).Result;
+                var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;
+
+                if (result != null && result.Codigo == 1)
+                {
+                    return RedirectToAction("Login", "Login");
+                }
+                else if (result.Codigo == 0)
+                {
+                    ViewBag.Mensaje = "Ocurrió un error";
+                    return View();
+                }
+                else
+                {
+                    ViewBag.Mensaje = result!.Mensaje;
+                    return View();
+                }
+            }
+        }
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ChangePassword(Usuario model)
+        {
+            model.Contrasenna = Encrypt(model.Contrasenna);
+            model.ConfirmarContrasenna = Encrypt(model.ConfirmarContrasenna);
+
+            if (model.Contrasenna != model.ConfirmarContrasenna)
+            {
+                ViewBag.Mensaje = "La confirmación de su contraseña no coincide";
+                return View();
+            }
+
+            model.UsuarioID = long.Parse(HttpContext.Session.GetString("Consecutivo")!.ToString());
+
+            using (var client = _http.CreateClient())
+            {
+                var url = _conf.GetSection("Variables:UrlApi").Value + "Login/ActualizarContrasenna";
+
+                JsonContent datos = JsonContent.Create(model);
+
+                var response = client.PutAsync(url, datos).Result;
+                var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;
+
+                if (result != null && result.Codigo == 0)
+                {
+                    return RedirectToAction("Logout", "Login");
+                }
+                else
+                {
+                    ViewBag.Mensaje = result!.Mensaje;
+                    return View();
+                }
+            }
+        }
         public string Encrypt(string texto)
         {
             byte[] iv = new byte[16];

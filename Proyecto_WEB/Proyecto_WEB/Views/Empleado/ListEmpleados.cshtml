@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<Proyecto_WEB.Models.Empleado>
-
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
 <h1>Lista de Empleados</h1>
 
 @if (!Model.Any())

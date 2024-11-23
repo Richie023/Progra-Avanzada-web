@@ -1,0 +1,33 @@
+﻿@model List<Proyecto_WEB.Models.Clase>
+
+@{
+    ViewData["Title"] = "Clases";
+}
+
+<h2>Clases</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="row">
+    @foreach (var clase in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-80">
+                    <img src="/images/sinMembresia.jpg" class="card-img-top" alt="Sin Membresia">
+                <div class="card-body">
+                    <h4 class="card-title">@clase.Nombre</h4>
+                    <h5>@clase.Entrenador</h5>
+                    <p class="card-text">
+                        Duración(Minutos): $@clase.Duracion <br />
+                        Horario: @clase.Horario <br />
+                        Descripción: @clase.Descripcion
+                    </p>
+                    <a href="@Url.Action("RegistrarClase", "Clase")" class="btn btn-primary">Registrarme</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

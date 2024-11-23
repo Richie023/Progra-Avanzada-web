@@ -15,7 +15,7 @@ NombreRol VARCHAR (20) NOT NULL
 CREATE TABLE Usuario (
 	UsuarioID BIGINT PRIMARY KEY IDENTITY (1,1) ,
 	Username  VARCHAR (8) NOT NULL UNIQUE ,
-	Contrasenna VARCHAR (10) NOT NULL ,
+	Contrasenna VARCHAR (255) NOT NULL ,
 	Activo BIT NOT NULL ,
 	ClaveTemp BIT NOT NULL,
 	Vigencia DATETIME NOT NULL,
@@ -31,11 +31,11 @@ CREATE TABLE Cargo (
 CREATE TABLE Empleado (
     EmpleadoID INT PRIMARY KEY IDENTITY  (1,1) ,
 	UsuarioID BIGINT NOT NULL,
-    Nombre VARCHAR(50) NOT NULL,
-	Apellidos VARCHAR (50) NOT NULL,
+    Nombre VARCHAR(255) NOT NULL,
+	Apellidos VARCHAR (255) NOT NULL,
     FechaNacimiento DATETIME NOT NULL,
     Telefono INT NOT NULL ,
-	Email VARCHAR (30) ,
+	Email VARCHAR (255) ,
 	Direccion VARCHAR (255) ,
 	FechaContratacion DATE NOT NULL,
     CargoID INT ,
@@ -57,7 +57,7 @@ CREATE TABLE Clases (
     Nombre NVARCHAR(100) NOT NULL,
     Descripcion NVARCHAR(255),
     Duracion INT NOT NULL,
-	HorarioID INT NOT NULL,
+	Horario DATETIME NOT NULL,
     EmpleadoID INT NOT NULL,
     FOREIGN KEY (EmpleadoID) REFERENCES Empleado(EmpleadoID)
 );
@@ -65,12 +65,12 @@ CREATE TABLE Clases (
 CREATE TABLE Miembro (
 	MiembroID BIGINT PRIMARY KEY IDENTITY (1,1) ,
 	UsuarioID BIGINT NOT NULL,
-	Nombre VARCHAR(50) NOT NULL,
-	Apellidos VARCHAR (50) NOT NULL,
+	Nombre VARCHAR(255) NOT NULL,
+	Apellidos VARCHAR (255) NOT NULL,
 	FechaNacimiento DATETIME NOT NULL,
 	Genero CHAR(1) CHECK (Genero IN ('M', 'F' , 'N')),
 	Telefono INT NOT NULL ,
-	Email VARCHAR (20) UNIQUE ,
+	Email VARCHAR (255) UNIQUE ,
 	Direccion VARCHAR (255) ,
 	FechaRegistro Date NOT NULL,
 	MembresiaID INT NOT NULL ,
@@ -138,10 +138,29 @@ INSERT INTO Rol (NombreRol) VALUES ('Administrador');
 INSERT INTO Rol (NombreRol) VALUES ('Empleado');
 INSERT INTO Rol (NombreRol) VALUES ('Cliente');
 GO
-
 INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
-VALUES ('usuario1', 'P123', 1, 0, GETDATE(), 2);
+VALUES ('Admin1', 'Pnn5xk+wGxFNmOjdqJiICA==', 1, 0, GETDATE(), 1);
+--Contraseña : Password123
 GO
+INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
+VALUES ('usuario1', 'Pnn5xk+wGxFNmOjdqJiICA==', 1, 0, GETDATE(), 2);
+--Contraseña : Password123
+GO
+
+INSERT INTO Empleado
+      (UsuarioID
+      ,Nombre
+      ,Apellidos
+      ,FechaNacimiento
+      ,Telefono
+      ,Email
+      ,Direccion
+      ,FechaContratacion
+      ,CargoID)
+VALUES 
+      ( 2, 'Juan', 'Pérez', '1985-05-15', '123456789', 'juan.perez@example.com', '123 Calle Principal', '2024-01-15', 1);
+GO
+
 
 INSERT INTO Cargo (NombreCargo)
 VALUES ('Entrenador');
@@ -149,8 +168,18 @@ GO
 
 INSERT INTO Membresia (TipoMembresia, Precio, Duracion, Beneficios) 
 VALUES 
-('Sin membresia', 0.00, 'N/A', 'Acceso limitado a servicios b?sicos'),
-('Regular', 50.00, '1 mes', 'Acceso a gimnasio, clases grupales est?ndar'),
-('Premium', 100.00, '1 mes', 'Acceso a todas las ?reas, clases premium, sesiones con entrenador personal');
+('Sin membresia', 0.00, 'N/A', 'Acceso limitado a servicios básicos'),
+('Regular', 50.00, '1 mes', 'Acceso a gimnasio, clases grupales estándar'),
+('Premium', 100.00, '1 mes', 'Acceso a todas las áreas, clases premium, sesiones con entrenador personal');
 GO
 
+INSERT INTO Clases
+      (Nombre
+      ,Descripcion
+      ,Duracion
+      ,Horario
+      ,EmpleadoID)
+VALUES 
+      ('Yoga', 'Clase de yoga para todos los niveles', 60, GETDATE(), 2);
+GO
+--Cambiar ID a 1

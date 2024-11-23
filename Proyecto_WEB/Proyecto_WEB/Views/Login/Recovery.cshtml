@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Login Page";
     Layout = "~/Views/Shared/_LayoutExterno.cshtml";
 }
@@ -6,26 +7,25 @@
 <div class="az-body">
     <div class="az-signin-wrapper">
         <div class="az-card-signin">
-            <a  asp-area="" asp-controller="Home" asp-action="Index"><h1 class="az-logo">Flexigym</h1></a> 
+            <a asp-area="" asp-controller="Home" asp-action="Index"><h1 class="az-logo">FlexiGym</h1></a>
             <div class="az-signin-header">
-                <form >
+                <form asp-controller="Login" asp-action="Recovery">
                     <div class="form-group">
                         <label>Correo</label>
-                        <input type="text" class="form-control" placeholder="Ingrese su correo para recuperación" value="">
+                        <input name="email" id="email" type="text" class="form-control" placeholder="Ingrese su correo para recuperación" value="">
                     </div>
                     <button class="btn btn-az-primary btn-block">Enviar correo</button>
                 </form>
+                @{
+                    if (ViewBag.Mensaje != null)
+                    {
+                        <div class="alert alert-secondary text-center pt-2">@ViewBag.Mensaje</div>
+                    }
+                }
             </div>
             <div class="az-signin-footer">
                 <p>Nuevo en Flexigym? <a asp-area="" asp-controller="Login" asp-action="Register">Registrarme</a></p>
             </div>
         </div>
     </div>
-
-    <script src="~/pages/jquery/jquery.min.js"></script>
-    <script src="~/pages/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/pages/ionicons/ionicons.js"></script>
-
-    <script src="~/pages/js/azia.js"></script>
-
 </div>

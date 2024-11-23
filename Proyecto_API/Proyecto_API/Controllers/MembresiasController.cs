@@ -22,7 +22,7 @@ namespace Proyecto_API.Controllers
         {
             using (var context = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
             {
-                var membresias = context.Query<Membresia>("SELECT * FROM Membresia").ToList();
+                var membresias = context.Query<Membresia>("ObtenerMembresias").ToList();
 
                 if (membresias == null || !membresias.Any())
                 {

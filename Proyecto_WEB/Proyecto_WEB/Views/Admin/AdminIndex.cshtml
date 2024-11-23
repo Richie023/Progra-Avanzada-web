@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Admin page";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container d-flex justify-content-center align-items-center full-height">
+    <div class="text-center">
+        <h1>Bienvenido @Context.Session.GetString("NombreUsuario")</h1>
+        <h3>Pagina de administrador</h3>
+    </div>
+</div>

@@ -25,12 +25,12 @@
         <div class="az-header">
             <div class="container">
                 <div class="az-header-left">
-                    <a class="az-logo" asp-area="" asp-controller="Home" asp-action="Index">Flexigym</a>
-                    <a href="" id="azMenuShow" class="az-header-menu-icon d-lg-none"></a>
+                    <a class="az-logo" asp-area="" asp-controller="Home" asp-action="Index">FlexiGym</a>
+                    <a href="" id="azMenuShow" class="az-header-menu-icon d-lg-none"><span></span></a>
                 </div>
                 <div class="az-header-menu">
                     <div class="az-header-menu-header">
-                        <a href="Index.cshtml" class="az-logo">FlexiGim</a>
+                        <a asp-controller="Home" asp-action="Index" class="az-logo">FlexiGym</a>
                         <a href="" class="close">&times;</a>
                     </div>
                     <ul class="nav">
@@ -50,7 +50,7 @@
                             </nav>
                         </li>
                         <li class="nav-item">
-                            <a href="chart-chartjs.html" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i> Blog</a>
+                            <a href="@Url.Action("Index", "Clase")" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i> Clases</a>
                         </li>
                         <li class="nav-item">
                             <a href="form-elements.html" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i> Tu espacio</a>
@@ -81,17 +81,36 @@
                                 <div class="az-img-user">
                                     <img src="~/images/user.png" alt="">
                                 </div>
-                                <h6>John Doe</h6>
-                                <span>Premium Member</span>
+                                @if (Context.Session.GetString("NombreUsuario") != null)
+                                {
+                                    <h6>@Context.Session.GetString("NombreUsuario")</h6>
+                                    <span>Premium Member</span>
+                                }
+                                else
+                                {
+                                    <h6>Usuario</h6>
+                                    <span>Premium Member</span>
+                                }
+
                             </div>
 
                                 @if (Context.Session.GetString("NombreUsuario") != null)
                                 {
+                                  
+                                    @if (Context.Session.GetString("Rol") == "Administrador")
+                                    {
+                                    <a href="@Url.Action("AdminIndex", "Admin")" class="dropdown-item"><i class="typcn typcn-cog-outline"></i>Ventana de administrador</a>
+                                    <a href="@Url.Action("Logout", "Login")" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Cerrar sesión</a>
+                                    }
+                                    else
+                                     {
                                     <a href="#" class="dropdown-item"><i class="typcn typcn-user-outline"></i> Mi Perfil</a>
                                     <a href="#" class="dropdown-item"><i class="typcn typcn-edit"></i> Editar perfil</a>
-                                    <a href="#" class="dropdown-item"><i class="typcn typcn-time"></i> Activity Logs</a>
+                                    <a href="@Url.Action("ClasesUsuario", "Clase")" class="dropdown-item"><i class="typcn typcn-time"></i> Tus clases</a>
                                     <a href="#" class="dropdown-item"><i class="typcn typcn-cog-outline"></i> Configuración de Cuenta</a>
                                     <a href="@Url.Action("Logout", "Login")" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Cerrar sesión</a>
+                                     }
+                      
                                 }
                                 else
                                 {
@@ -146,9 +165,7 @@
             @RenderBody()
         </main>
     </div>
-    <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
-    </footer>
+
 
     <aside class="control-sidebar control-sidebar-dark">
     </aside>

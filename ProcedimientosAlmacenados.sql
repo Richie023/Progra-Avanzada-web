@@ -1,6 +1,6 @@
 CREATE PROCEDURE [dbo].[CrearCliente]
     @Username VARCHAR(8),
-    @Contrasenna VARCHAR(10),
+    @Contrasenna VARCHAR(255),
     @Nombre VARCHAR(50),
     @Apellidos VARCHAR(50),
     @FechaNacimiento DATETIME,
@@ -82,7 +82,114 @@ BEGIN
     VALUES (@Nombre, @Apellidos, @FechaNacimiento, @Telefono, @Email, @Direccion, @FechaContratacion, @CargoID, @UsuarioID);
 END;
 GO
+CREATE PROCEDURE [dbo].[ObtenerMembresias]
+AS
+BEGIN
+    SELECT 
+      MembresiaID,
+	  TipoMembresia,
+	  Precio,
+	  Duracion,
+	  Beneficios
+ 
+    FROM 
+       Membresia
+END
+GO
 
+CREATE PROCEDURE [dbo].[ValidarUsuario]
+    @Email VARCHAR(255)
+AS
+BEGIN
+    DECLARE @UsuarioID BIGINT;
 
-DELETE FROM Miembro;
-DELETE FROM Usuario;
+    SELECT @UsuarioID = UsuarioID
+    FROM Empleado
+    WHERE Email = @Email;
+
+    IF @UsuarioID IS NULL
+    BEGIN
+        SELECT @UsuarioID = UsuarioID
+        FROM Miembro
+        WHERE Email = @Email;
+    END
+
+    IF @UsuarioID IS NOT NULL
+    BEGIN
+        SELECT U.UsuarioID,
+               U.Username,
+               U.Contrasenna,
+               U.Activo,
+               U.ClaveTemp,
+               U.Vigencia,
+               U.RolID,
+               R.NombreRol
+        FROM Usuario U
+        INNER JOIN Rol R ON U.RolID = R.RolID
+        WHERE U.UsuarioID = @UsuarioID;
+    END
+END
+GO
+
+CREATE PROCEDURE [dbo].[ActualizarContrasenna]
+	@UsuarioID bigint,
+	@Contrasenna varchar(255),
+	@ClaveTemp bit,
+	@Vigencia datetime
+AS
+BEGIN
+	
+	UPDATE	dbo.Usuario
+	SET		Contrasenna = @Contrasenna,
+			ClaveTemp = @ClaveTemp,
+			Vigencia = @Vigencia
+	WHERE	UsuarioID = @UsuarioID
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarClases]
+AS
+BEGIN
+    SELECT 
+        c.ClaseID,
+        c.Nombre ,
+        c.Descripcion,
+        c.Duracion,
+        c.Horario,
+        CONCAT(e.Nombre, ' ', e.Apellidos) AS Entrenador
+    FROM 
+       Clases c
+    JOIN 
+        Empleado e
+    ON 
+        c.EmpleadoID = e.EmpleadoID;
+END
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarUsuarioClases]
+    @UsuarioID INT
+AS
+BEGIN
+    SELECT 
+        c.ClaseID,
+        c.Nombre,
+        c.Descripcion,
+        c.Duracion,
+        c.Horario,
+        CONCAT(e.Nombre, ' ', e.Apellidos) AS Entrenador
+    FROM 
+        Clases c
+    JOIN 
+        Empleado e
+        ON c.EmpleadoID = e.EmpleadoID
+    JOIN 
+        MiembroClase mc
+        ON c.ClaseID = mc.ClaseID
+    JOIN 
+		Miembro m
+        ON mc.MiembroID = m.MiembroID
+    WHERE 
+        m.UsuarioID = @UsuarioID;
+END
+GO
