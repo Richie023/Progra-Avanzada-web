@@ -1,63 +1,120 @@
 ﻿@model Proyecto_WEB.Models.Empleado
+
 @{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Registrar Empleado";
 }
+
 <h1>Registrar Empleado</h1>
 
 <form asp-action="RegEmpleados" method="post">
-    <div class="form-group">
-        <label asp-for="Nombre"></label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
-    </div>
+    <!-- Datos del Usuario -->
+    <fieldset>
+        <legend>Datos del Usuario</legend>
 
-    <div class="form-group">
-        <label asp-for="Apellidos"></label>
-        <input asp-for="Apellidos" class="form-control" />
-        <span asp-validation-for="Apellidos" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Usuario.Username">Nombre de Usuario</label>
+            <input asp-for="Usuario.Username" class="form-control" required />
+            <span asp-validation-for="Usuario.Username" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="FechaNacimiento"></label>
-        <input asp-for="FechaNacimiento" type="date" class="form-control" />
-        <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Usuario.Contrasenna">Contraseña</label>
+            <input asp-for="Usuario.Contrasenna" type="password" class="form-control" required />
+            <span asp-validation-for="Usuario.Contrasenna" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Telefono"></label>
-        <input asp-for="Telefono" class="form-control" />
-        <span asp-validation-for="Telefono" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Usuario.ConfirmarContrasenna">Confirmar Contraseña</label>
+            <input asp-for="Usuario.ConfirmarContrasenna" type="password" class="form-control" required />
+            <span asp-validation-for="Usuario.ConfirmarContrasenna" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" type="email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Usuario.RolID">Rol</label>
+            <select asp-for="Usuario.RolID" class="form-control" required>
+                <option value="" disabled selected>Selecciona un rol</option>
+                @if (ViewBag.Roles != null)
+                {
+                    foreach (var rol in ViewBag.Roles)
+                    {
+                        <option value="@rol.RolID">@rol.NombreRol</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="Usuario.RolID" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Usuario.RolID">Rol</label>
+            <select asp-for="Usuario.RolID" class="form-control" required>
+                <option value="" disabled selected>Selecciona un rol</option>
+                @foreach (var rol in ViewBag.Roles)
+                {
+                    <option value="@rol.RolID">@rol.NombreRol</option>
+                }
+            </select>
+            <span asp-validation-for="Usuario.RolID" class="text-danger"></span>
+        </div>
+    </fieldset>
 
-    <div class="form-group">
-        <label asp-for="Direccion"></label>
-        <textarea asp-for="Direccion" class="form-control"></textarea>
-        <span asp-validation-for="Direccion" class="text-danger"></span>
-    </div>
+    <!-- Datos del Empleado -->
+    <fieldset>
+        <legend>Datos del Empleado</legend>
 
-    <div class="form-group">
-        <label asp-for="FechaContratacion"></label>
-        <input asp-for="FechaContratacion" type="date" class="form-control" />
-        <span asp-validation-for="FechaContratacion" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Nombre">Nombre</label>
+            <input asp-for="Nombre" class="form-control" required />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="CargoID"></label>
-        <input asp-for="CargoID" class="form-control" />
-        <span asp-validation-for="CargoID" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Apellidos">Apellidos</label>
+            <input asp-for="Apellidos" class="form-control" required />
+            <span asp-validation-for="Apellidos" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="UsuarioID"></label>
-        <input asp-for="UsuarioID" class="form-control" />
-        <span asp-validation-for="UsuarioID" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="FechaNacimiento">Fecha de Nacimiento</label>
+            <input asp-for="FechaNacimiento" type="date" class="form-control" required />
+            <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Telefono">Teléfono</label>
+            <input asp-for="Telefono" type="number" class="form-control" required />
+            <span asp-validation-for="Telefono" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email">Correo Electrónico</label>
+            <input asp-for="Email" type="email" class="form-control" required />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Direccion">Dirección</label>
+            <textarea asp-for="Direccion" class="form-control" required></textarea>
+            <span asp-validation-for="Direccion" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FechaContratacion">Fecha de Contratación</label>
+            <input asp-for="FechaContratacion" type="date" class="form-control" required />
+            <span asp-validation-for="FechaContratacion" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CargoID">Cargo</label>
+            <select asp-for="CargoID" class="form-control" required>
+                <option value="" disabled selected>Selecciona un cargo</option>
+                @foreach (var cargo in ViewBag.Cargos)
+                {
+                    <option value="@cargo.CargoID">@cargo.NombreCargo</option>
+                }
+            </select>
+            <span asp-validation-for="CargoID" class="text-danger"></span>
+        </div>
+    </fieldset>
 
     <button type="submit" class="btn btn-primary">Registrar</button>
 </form>

@@ -10,5 +10,6 @@
         public bool Activo { get; set; } = true;
         public bool ClaveTemp { get; set; } = false;
         public DateTime Vigencia { get; set; }
+        public int RolID { get; set; } 
     }
 }

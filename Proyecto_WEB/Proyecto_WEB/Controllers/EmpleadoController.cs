@@ -15,26 +15,60 @@ namespace Proyecto_WEB.Controllers
         }
 
         [HttpGet]
-        public IActionResult RegEmpleados()
+        public async Task<IActionResult> RegEmpleados()
         {
-            // Muestra el formulario de registro
+            using (var client = _httpClientFactory.CreateClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:5001/api/");
+
+                // Obtener los roles
+                var rolesResponse = await client.GetAsync("Usuario/ListarRoles");
+
+                if (rolesResponse.IsSuccessStatusCode)
+                {
+                    var roles = await rolesResponse.Content.ReadFromJsonAsync<IEnumerable<Rol>>();
+                    ViewBag.Roles = roles; // Asignar al ViewBag
+                }
+                else
+                {
+                    ViewBag.Roles = new List<Rol>();
+                    ModelState.AddModelError("", "No se pudieron cargar los roles.");
+                }
+            }
+
             return View("~/Views/Empleado/RegEmpleados.cshtml");
         }
 
+
+
         [HttpPost]
-        public async Task<IActionResult> RegEmpleados(Empleado model)
+        public async Task<IActionResult> RegEmpleados(Empleado model, Usuario usuarioModel)
         {
             if (ModelState.IsValid)
             {
-                // Llama a la API para registrar el empleado
                 using (var client = _httpClientFactory.CreateClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:5001/api/"); // Cambia por la URL de tu API
-                    var response = await client.PostAsJsonAsync("Empleado/Registrar", model);
+                    // Base URL de la API
+                    client.BaseAddress = new Uri("https://localhost:5001/api/");
 
-                    if (response.IsSuccessStatusCode)
+                    // Registrar Usuario
+                    var usuarioResponse = await client.PostAsJsonAsync("Usuario/Registrar", usuarioModel);
+                    if (!usuarioResponse.IsSuccessStatusCode)
                     {
-                        return RedirectToAction("ListEmpleados"); // Redirige a la lista de empleados tras guardar
+                        ModelState.AddModelError("", "No se pudo registrar el usuario.");
+                        return View("~/Views/Empleado/RegEmpleados.cshtml");
+                    }
+
+                    // Obtener el UsuarioID registrado
+                    var usuarioID = await usuarioResponse.Content.ReadFromJsonAsync<long>();
+                    model.UsuarioID = usuarioID;
+
+                    // Registrar Empleado
+                    var empleadoResponse = await client.PostAsJsonAsync("Empleado/Registrar", model);
+                    if (empleadoResponse.IsSuccessStatusCode)
+                    {
+                        // Redirigir a la lista de empleados si el registro fue exitoso
+                        return RedirectToAction("ListEmpleados");
                     }
                     else
                     {
@@ -43,32 +77,24 @@ namespace Proyecto_WEB.Controllers
                 }
             }
 
-            // Si hay errores, vuelve a mostrar el formulario
-            return View("~/Views/Empleado/RegEmpleados.cshtml", model);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ListEmpleados()
-        {
+            // Si hay errores, recargar cargos y roles para mostrarlos en la vista
             using (var client = _httpClientFactory.CreateClient())
             {
-                client.BaseAddress = new Uri("https://localhost:5001/api/"); // URL de tu API
+                client.BaseAddress = new Uri("https://localhost:5001/api/");
+                var cargosResponse = await client.GetAsync("Cargo/Listar");
+                var rolesResponse = await client.GetAsync("Usuario/ListarRoles");
 
-                // Llamada a la API para obtener la lista de empleados
-                var response = await client.GetAsync("Empleado/Listar");
-                if (response.IsSuccessStatusCode)
+                if (cargosResponse.IsSuccessStatusCode && rolesResponse.IsSuccessStatusCode)
                 {
-                    var empleados = await response.Content.ReadFromJsonAsync<IEnumerable<Empleado>>();
-                    return View("~/Views/Empleado/ListEmpleados.cshtml", empleados);
-                }
-                else
-                {
-                    // Manejo de errores en caso de que la API falle
-                    ModelState.AddModelError("", "No se pudo obtener la lista de empleados.");
-                    return View("~/Views/Empleado/ListEmpleados.cshtml", new List<Empleado>());
+                    var cargos = await cargosResponse.Content.ReadFromJsonAsync<IEnumerable<Cargo>>();
+                    var roles = await rolesResponse.Content.ReadFromJsonAsync<IEnumerable<Rol>>();
+
+                    ViewBag.Cargos = cargos ?? new List<Cargo>();
+                    ViewBag.Roles = roles ?? new List<Rol>();
                 }
             }
-        }
 
+            return View("~/Views/Empleado/RegEmpleados.cshtml", model);
+        }
     }
 }
