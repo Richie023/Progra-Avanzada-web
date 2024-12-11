@@ -115,8 +115,10 @@ namespace Proyecto_WEB.Controllers
         }
 
         [HttpGet]
-        public IActionResult PlanUsuario(long usuarioId)
+        public IActionResult PlanUsuario()
         {
+            long usuarioId = long.Parse(HttpContext.Session.GetString("Consecutivo")!);
+
             using (var client = _http.CreateClient())
             {
                 string url = _conf.GetSection("Variables:UrlApi").Value + $"PlanEntrenamiento/PlanUsuario/{usuarioId}";
