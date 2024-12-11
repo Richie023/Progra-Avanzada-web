@@ -24,10 +24,7 @@
         <input type="number" id="Peso" name="Peso" class="form-control" value="@Model.Peso" required />
     </div>
 
-    <div class="form-group">
-        <label for="Fecha">Fecha:</label>
-        <input type="date" id="Fecha" name="Fecha" class="form-control" value="@Model.Fecha.ToString("yyyy-MM-dd")" required />
-    </div>
+    <input type="hidden" name="FechaCreacion" value="@DateTime.Now" />
 
     <div class="form-group">
         <label for="UsuarioID">Usuario:</label>

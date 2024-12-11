@@ -18,7 +18,11 @@
             <div class="card-body">
                 <h5 class="card-title">Plan Personalizado</h5>
                 <p class="card-text">Trabajamos contigo para crear un plan de entrenamiento adaptado a tus necesidades y objetivos.</p>
-                <a href="/PlanEntrenamiento/Index" class="btn btn-primary">Ver Plan</a>
+                @{
+                    var usuarioId = User.FindFirst("UserId")?.Value;
+                }
+                <a href="@Url.Action("PlanUsuario", "PlanEntrenamiento", new { usuarioId = usuarioId })" class="btn btn-primary">Ver Plan</a>
+
             </div>
         </div>
     </div>

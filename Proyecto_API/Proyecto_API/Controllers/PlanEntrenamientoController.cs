@@ -2,6 +2,8 @@
 using Microsoft.Data.SqlClient;
 using Dapper;
 using Proyecto_API.Models;
+using System.Data;
+using System.Security.Claims;
 
 namespace Proyecto_API.Controllers
 {
@@ -28,7 +30,7 @@ namespace Proyecto_API.Controllers
                     model.Ejercicio,
                     model.Repeticiones,
                     model.Peso,
-                    model.Fecha
+                    FechaCreacion = model.FechaCreacion == default ? (DateTime?)null : model.FechaCreacion
                 }, commandType: System.Data.CommandType.StoredProcedure);
 
                 if (result > 0)
@@ -44,23 +46,57 @@ namespace Proyecto_API.Controllers
 
         [HttpGet]
         [Route("ListaPlan")]
-        public IActionResult ListaPlan([FromQuery] long usuarioID, [FromQuery] int rolID)
+        public async Task<IActionResult> ListaPlan()
         {
             using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
             {
-                IEnumerable<PlanEntrenamiento> planes;
-
-                if (rolID == 1)
+                try
                 {
-                    planes = connection.Query<PlanEntrenamiento>("ConsultarPlanEntenamiento", new { UsuarioID = usuarioID, RolID = rolID }, commandType: System.Data.CommandType.StoredProcedure);
-                }
-                else
-                {
-                    planes = connection.Query<PlanEntrenamiento>("ConsultarPlanEntenamiento", new { UsuarioID = usuarioID, RolID = rolID }, commandType: System.Data.CommandType.StoredProcedure);
-                }
+                    var planes = await connection.QueryAsync<PlanEntrenamiento>(
+                        "ConsultarPlanEntenamientoAdmin",
+                        commandType: CommandType.StoredProcedure
+                    );
 
-                return Ok(planes);
+                    if (planes == null || !planes.Any())
+                    {
+                        return NotFound(new { success = false, message = "No se encontraron los planes de entrenamiento." });
+                    }
+
+                    return Ok(new { success = true, data = planes });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { success = false, message = ex.Message });
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("PlanUsuario/{usuarioId}")]
+        public async Task<IActionResult> PlanUsuario(long usuarioId)
+        {
+            using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
+            {
+                try
+                {
+                    var planes = await connection.QueryAsync<PlanEntrenamiento>(
+                        "ConsultarPlanEntrenamientoUsuario",
+                        new { UsuarioID = usuarioId },
+                        commandType: CommandType.StoredProcedure
+                    );
+
+                    if (planes == null || !planes.Any())
+                    {
+                        return NotFound(new { success = false, message = "No se encontraron planes de entrenamiento para el usuario." });
+                    }
+
+                    return Ok(new { success = true, data = planes });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { success = false, message = ex.Message });
+                }
             }
         }
     }
-}
+    }

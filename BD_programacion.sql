@@ -129,7 +129,7 @@ CREATE TABLE PlanEntrenamiento (
     Ejercicio NVARCHAR(100) NOT NULL,
     Repeticiones INT NOT NULL,
     Peso DECIMAL(5,2) NOT NULL,
-    Fecha DATE NOT NULL,
+    FechaCreacion DATETIME NOT NULL DEFAULT GETDATE(),
     FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID)
 );
 

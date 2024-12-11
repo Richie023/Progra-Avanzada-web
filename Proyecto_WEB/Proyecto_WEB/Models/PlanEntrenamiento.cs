@@ -9,6 +9,6 @@ namespace Proyecto_WEB.Models
         public string Ejercicio { get; set; } = string.Empty;
         public int Repeticiones { get; set; }
         public decimal Peso { get; set; }
-        public DateTime Fecha { get; set; }
+        public DateTime FechaCreacion { get; set; }
     }
 }

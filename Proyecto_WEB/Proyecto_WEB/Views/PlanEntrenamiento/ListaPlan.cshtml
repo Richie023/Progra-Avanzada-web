@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Proyecto_WEB.Models.PlanEntrenamiento>
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <h1>Lista de Planes de Entrenamiento</h1>
@@ -11,20 +11,22 @@
 <table class="table">
     <thead>
         <tr>
+            <th>ID del Usuario</th>
             <th>Ejercicio</th>
             <th>Repeticiones</th>
             <th>Peso</th>
-            <th>Fecha</th>
+            <th>Fecha de Creación</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var plan in Model)
         {
             <tr>
+                <td>@plan.UsuarioID</td>
                 <td>@plan.Ejercicio</td>
                 <td>@plan.Repeticiones</td>
                 <td>@plan.Peso</td>
-                <td>@plan.Fecha.ToString("yyyy-MM-dd")</td>
+                <td>@plan.FechaCreacion</td>
             </tr>
         }
     </tbody>

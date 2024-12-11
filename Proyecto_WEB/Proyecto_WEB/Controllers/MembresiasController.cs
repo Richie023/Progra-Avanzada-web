@@ -30,11 +30,9 @@ namespace Proyecto_WEB.Controllers
                     {
                         var result = response.Content.ReadFromJsonAsync<JsonElement>().Result;
 
-                        // Verificar si la respuesta es exitosa y contiene datos
                         if (result.TryGetProperty("success", out var success) && success.GetBoolean() &&
                             result.TryGetProperty("data", out var data) && data.ValueKind == JsonValueKind.Array)
                         {
-                            // Deserializar la lista de membresías
                             var datosContenido = JsonSerializer.Deserialize<List<Membresia>>(data.ToString());
                             return View(datosContenido);
                         }

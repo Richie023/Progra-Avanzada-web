@@ -203,38 +203,45 @@ CREATE PROCEDURE [dbo].[RegistrarPlanEntenamiento]
     @Ejercicio NVARCHAR(100),
     @Repeticiones INT,
     @Peso DECIMAL(5,2),
-    @Fecha DATE
+    @FechaCreacion DATETIME
 AS
 BEGIN
-    IF EXISTS (SELECT 1 FROM Usuario WHERE UsuarioID = @UsuarioID)
-    BEGIN
-        INSERT INTO PlanEntrenamiento (UsuarioID, Ejercicio, Repeticiones, Peso, Fecha)
-        VALUES (@UsuarioID, @Ejercicio, @Repeticiones, @Peso, @Fecha);
-    END
-    ELSE
-    BEGIN
-        PRINT 'El usuario no existe.';
-    END
-END;
+    INSERT INTO PlanEntrenamiento (UsuarioID, Ejercicio, Repeticiones, Peso, FechaCreacion)
+    VALUES (@UsuarioID, @Ejercicio, @Repeticiones, @Peso, GETDATE());
+END
 GO
 
-CREATE PROCEDURE [dbo].[ConsultarPlanEntenamiento]
-    @UsuarioID BIGINT,
-    @RolID INT
+CREATE PROCEDURE [dbo].[ConsultarPlanEntenamientoAdmin]
 AS
 BEGIN
-    IF @RolID = 1
-    BEGIN
-        SELECT PlanEntrenamientoID, UsuarioID, Ejercicio, Repeticiones, Peso, Fecha
-        FROM PlanEntrenamiento
-        ORDER BY Fecha;
-    END
-    ELSE
-    BEGIN
-        SELECT PlanEntrenamientoID, Ejercicio, Repeticiones, Peso, Fecha
-        FROM PlanEntrenamiento
-        WHERE UsuarioID = @UsuarioID
-        ORDER BY Fecha;
-    END
-END;
+    SELECT 
+	   UsuarioID,
+	   Ejercicio,
+	   Repeticiones,
+	   Peso,
+	   FechaCreacion
+	
+    FROM 
+       PlanEntrenamiento
+END
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarPlanEntrenamientoUsuario]
+    @UsuarioID BIGINT
+AS
+BEGIN
+    SELECT 
+        PlanEntrenamientoID,
+        UsuarioID,
+        Ejercicio,
+        Repeticiones,
+        Peso,
+        FechaCreacion
+    FROM 
+        PlanEntrenamiento
+    WHERE 
+        UsuarioID = @UsuarioID
+    ORDER BY 
+        FechaCreacion DESC;
+END
 GO

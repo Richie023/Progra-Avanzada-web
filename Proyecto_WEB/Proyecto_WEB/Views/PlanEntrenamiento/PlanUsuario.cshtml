@@ -1,0 +1,38 @@
+﻿@model List<Proyecto_WEB.Models.PlanEntrenamiento>
+
+@{
+    ViewData["Title"] = "Plan de Entrenamiento";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var plan in Model)
+        {
+            <div class="card mt-4 shadow-lg">
+                <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <img src="/images/planEntrenamiento.jpg" alt="Icono de Plan" class="mr-3" style="width: 40px; height: 40px;">
+                    <h4 class="m-0">Ejercicio: @plan.Ejercicio</h4>
+                </div>
+
+                <div class="card-body">
+                    <p class="card-text"><strong>Repeticiones:</strong> @plan.Repeticiones</p>
+                    <p class="card-text"><strong>Peso:</strong> @plan.Peso kg</p>
+                    <p class="card-text"><strong>Fecha:</strong> @plan.FechaCreacion</p>
+                </div>
+
+                <div class="card-footer text-muted text-center">
+                    <p>Recuerda que los planes pueden ajustarse en función de tus avances. Si necesitas cambios, no dudes en contactarnos.</p>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-danger mt-4">
+            <strong>¡Error!</strong> No se encontraron planes de entrenamiento.
+        </div>
+    }
+</div>

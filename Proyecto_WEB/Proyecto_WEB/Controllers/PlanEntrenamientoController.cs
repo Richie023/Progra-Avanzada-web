@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Proyecto_WEB.Models;
+using System.Data;
 using System.Net.Http;
 using System.Text.Json;
 
@@ -20,10 +21,9 @@ namespace Proyecto_WEB.Controllers
         [HttpGet]
         public IActionResult CrearPlan()
         {
-            // Obtener la lista de usuarios desde la API
             using (var client = _http.CreateClient())
             {
-                string url = _conf.GetSection("Variables:UrlApi").Value + "Usuario/ListaUsuarios"; // URL del nuevo endpoint
+                string url = _conf.GetSection("Variables:UrlApi").Value + "Usuario/ListaUsuarios";
                 var response = client.GetAsync(url).Result;
 
                 if (response.IsSuccessStatusCode)
@@ -31,7 +31,6 @@ namespace Proyecto_WEB.Controllers
                     var usuarios = response.Content.ReadFromJsonAsync<List<Usuario>>().Result;
                     var model = new PlanEntrenamiento();
 
-                    // Asignar la lista de usuarios al ViewData para usarla en el SelectList
                     ViewData["Usuarios"] = new SelectList(usuarios, "UsuarioID", "Username");
                     return View(model);
                 }
@@ -75,7 +74,7 @@ namespace Proyecto_WEB.Controllers
             return View(model);
         }
 
-    [HttpGet]
+        [HttpGet]
         public IActionResult ListaPlan()
         {
             using (var client = _http.CreateClient())
@@ -93,13 +92,52 @@ namespace Proyecto_WEB.Controllers
                         if (result.TryGetProperty("success", out var success) && success.GetBoolean() &&
                             result.TryGetProperty("data", out var data) && data.ValueKind == JsonValueKind.Array)
                         {
-                            // Deserializar los planes de entrenamiento
                             var planes = JsonSerializer.Deserialize<List<PlanEntrenamiento>>(data.ToString());
                             return View(planes);
                         }
                         else
                         {
-                            ViewBag.ErrorMessage = "No se encontraron planes de entrenamiento.";
+                            ViewBag.ErrorMessage = "No se encontraron membresías.";
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Error al conectar con la API.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = $"Ocurrió un error al conectarse con la API: {ex.Message}";
+                }
+
+                return View(new List<PlanEntrenamiento>());
+            }
+        }
+
+        [HttpGet]
+        public IActionResult PlanUsuario(long usuarioId)
+        {
+            using (var client = _http.CreateClient())
+            {
+                string url = _conf.GetSection("Variables:UrlApi").Value + $"PlanEntrenamiento/PlanUsuario/{usuarioId}";
+
+                try
+                {
+                    var response = client.GetAsync(url).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = response.Content.ReadFromJsonAsync<JsonElement>().Result;
+
+                        if (result.TryGetProperty("success", out var success) && success.GetBoolean() &&
+                            result.TryGetProperty("data", out var data) && data.ValueKind == JsonValueKind.Array)
+                        {
+                            var planes = JsonSerializer.Deserialize<List<PlanEntrenamiento>>(data.ToString());
+                            return View(planes);
+                        }
+                        else
+                        {
+                            ViewBag.ErrorMessage = "No se encontraron planes de entrenamiento para el usuario.";
                         }
                     }
                     else
