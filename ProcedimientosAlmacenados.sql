@@ -197,3 +197,44 @@ BEGIN
         m.UsuarioID = @UsuarioID;
 END
 GO
+
+CREATE PROCEDURE [dbo].[RegistrarPlanEntenamiento]
+    @UsuarioID BIGINT,
+    @Ejercicio NVARCHAR(100),
+    @Repeticiones INT,
+    @Peso DECIMAL(5,2),
+    @Fecha DATE
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM Usuario WHERE UsuarioID = @UsuarioID)
+    BEGIN
+        INSERT INTO PlanEntrenamiento (UsuarioID, Ejercicio, Repeticiones, Peso, Fecha)
+        VALUES (@UsuarioID, @Ejercicio, @Repeticiones, @Peso, @Fecha);
+    END
+    ELSE
+    BEGIN
+        PRINT 'El usuario no existe.';
+    END
+END;
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarPlanEntenamiento]
+    @UsuarioID BIGINT,
+    @RolID INT
+AS
+BEGIN
+    IF @RolID = 1
+    BEGIN
+        SELECT PlanEntrenamientoID, UsuarioID, Ejercicio, Repeticiones, Peso, Fecha
+        FROM PlanEntrenamiento
+        ORDER BY Fecha;
+    END
+    ELSE
+    BEGIN
+        SELECT PlanEntrenamientoID, Ejercicio, Repeticiones, Peso, Fecha
+        FROM PlanEntrenamiento
+        WHERE UsuarioID = @UsuarioID
+        ORDER BY Fecha;
+    END
+END;
+GO

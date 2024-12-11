@@ -2,9 +2,6 @@
 using Microsoft.Data.SqlClient;
 using Dapper;
 using Proyecto_API.Models;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Proyecto_API.Controllers
 {
@@ -19,49 +16,50 @@ namespace Proyecto_API.Controllers
             _conf = conf;
         }
 
-        [HttpGet]
-        [Route("ObtenerPlan/{id}")]
-        public IActionResult ObtenerPlan(int id)
+        [HttpPost]
+        [Route("CrearPlan")]
+        public IActionResult CrearPlan(PlanEntrenamiento model)
         {
-            using (var context = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
+            using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
             {
-                var plan = context.QueryFirstOrDefault<PlanEntrenamiento>(
-                    "SELECT * FROM PlanEntrenamiento WHERE PlanEntrenamientoID = @Id", new { Id = id });
-
-                if (plan == null)
+                var result = connection.Execute("RegistrarPlanEntenamiento", new
                 {
-                    return NotFound(new { Mensaje = "No se encontró el plan de entrenamiento." });
-                }
+                    model.UsuarioID,
+                    model.Ejercicio,
+                    model.Repeticiones,
+                    model.Peso,
+                    model.Fecha
+                }, commandType: System.Data.CommandType.StoredProcedure);
 
-                return Ok(plan);
+                if (result > 0)
+                {
+                    return Ok(new { Message = "Plan de entrenamiento creado correctamente" });
+                }
+                else
+                {
+                    return BadRequest(new { Message = "No se pudo crear el plan de entrenamiento" });
+                }
             }
         }
 
-        [HttpPost]
-        [Route("CrearPlan")]
-        public IActionResult CrearPlan([FromBody] PlanEntrenamiento planEntrenamiento)
+        [HttpGet]
+        [Route("ListaPlan")]
+        public IActionResult ListaPlan([FromQuery] long usuarioID, [FromQuery] int rolID)
         {
-            if (planEntrenamiento == null)
+            using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
             {
-                return BadRequest(new { Mensaje = "El plan de entrenamiento no puede ser nulo." });
-            }
+                IEnumerable<PlanEntrenamiento> planes;
 
-            using (var context = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
-            {
-                var query = "INSERT INTO PlanEntrenamiento (UsuarioID, Ejercicio, Repeticiones, Peso, Fecha) " +
-                            "VALUES (@UsuarioID, @Ejercicio, @Repeticiones, @Peso, @Fecha); " +
-                            "SELECT CAST(SCOPE_IDENTITY() AS INT);";
-
-                var planId = context.Query<int>(query, new
+                if (rolID == 1)
                 {
-                    UsuarioID = planEntrenamiento.UsuarioID,
-                    Ejercicio = planEntrenamiento.Ejercicio,
-                    Repeticiones = planEntrenamiento.Repeticiones,
-                    Peso = planEntrenamiento.Peso,
-                    Fecha = planEntrenamiento.Fecha
-                }).Single();
+                    planes = connection.Query<PlanEntrenamiento>("ConsultarPlanEntenamiento", new { UsuarioID = usuarioID, RolID = rolID }, commandType: System.Data.CommandType.StoredProcedure);
+                }
+                else
+                {
+                    planes = connection.Query<PlanEntrenamiento>("ConsultarPlanEntenamiento", new { UsuarioID = usuarioID, RolID = rolID }, commandType: System.Data.CommandType.StoredProcedure);
+                }
 
-                return CreatedAtAction("ObtenerPlan", new { id = planId }, new { Mensaje = "Plan creado exitosamente." });
+                return Ok(planes);
             }
         }
     }

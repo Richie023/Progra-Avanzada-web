@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="~/pages/typicons.font/typicons.css">
     <link rel="stylesheet" href="~/pages/flag-icon-css/css/flag-icon.min.css">
     <link rel="stylesheet" href="~/pages/css/azia.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
     <header>
@@ -39,6 +41,13 @@
                                 <nav class="az-menu-sub">
                                     <a asp-controller="Empleado" asp-action="RegEmpleados" class="nav-link">Registrar Empleado</a>
                                     <a asp-controller="Empleado" asp-action="ListEmpleados" class="nav-link">Lista de Empleados</a>
+                                </nav>
+                            </li>
+                            <li class="nav-item">
+                                <a href="" class="nav-link with-sub"><i class="fas fa-dumbbell" style="margin-right: 8px;"></i> Planes de Entrenamiento</a>
+                                <nav class="az-menu-sub">
+                                    <a asp-controller="PlanEntrenamiento" asp-action="CrearPlan" class="nav-link">Crear Plan de Entrenamiento</a>
+                                    <a asp-controller="PlanEntrenamiento" asp-action="ListaPlan" class="nav-link">Ver Todos los Planes de Entrenamiento</a>
                                 </nav>
                             </li>
                             <li class="nav-item">

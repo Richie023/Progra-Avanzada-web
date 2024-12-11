@@ -79,6 +79,25 @@ namespace Proyecto_API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("ListaUsuarios")]
+        public IActionResult ListaUsuarios()
+        {
+            using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
+            {
+                var usuarios = connection.Query<Usuario>("SELECT UsuarioID, Username FROM Usuario").ToList();
+
+                if (usuarios != null && usuarios.Any())
+                {
+                    return Ok(usuarios);
+                }
+                else
+                {
+                    return NotFound(new { Message = "No se encontraron usuarios." });
+                }
+            }
+        }
+
         [HttpGet("ListarRoles")]
         public IActionResult ListarRoles()
         {

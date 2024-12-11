@@ -1,0 +1,44 @@
+﻿@model Proyecto_WEB.Models.PlanEntrenamiento
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Crear Plan de Entrenamiento</h1>
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="CrearPlan" method="post">
+    <div class="form-group">
+        <label for="Ejercicio">Ejercicio:</label>
+        <input type="text" id="Ejercicio" name="Ejercicio" class="form-control" value="@Model.Ejercicio" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Repeticiones">Repeticiones:</label>
+        <input type="number" id="Repeticiones" name="Repeticiones" class="form-control" value="@Model.Repeticiones" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Peso">Peso (kg):</label>
+        <input type="number" id="Peso" name="Peso" class="form-control" value="@Model.Peso" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Fecha">Fecha:</label>
+        <input type="date" id="Fecha" name="Fecha" class="form-control" value="@Model.Fecha.ToString("yyyy-MM-dd")" required />
+    </div>
+
+    <div class="form-group">
+        <label for="UsuarioID">Usuario:</label>
+        <select id="UsuarioID" name="UsuarioID" class="form-control" required>
+            <option value="">Seleccionar Usuario</option>
+            @foreach (var usuario in ViewData["Usuarios"] as SelectList)
+            {
+                <option value="@usuario.Value">@usuario.Text</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Registrar Plan de Entrenamiento</button>
+</form>

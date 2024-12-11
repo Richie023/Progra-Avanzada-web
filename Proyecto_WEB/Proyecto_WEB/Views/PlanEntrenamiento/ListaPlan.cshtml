@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Proyecto_WEB.Models.PlanEntrenamiento>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Lista de Planes de Entrenamiento</h1>
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ejercicio</th>
+            <th>Repeticiones</th>
+            <th>Peso</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var plan in Model)
+        {
+            <tr>
+                <td>@plan.Ejercicio</td>
+                <td>@plan.Repeticiones</td>
+                <td>@plan.Peso</td>
+                <td>@plan.Fecha.ToString("yyyy-MM-dd")</td>
+            </tr>
+        }
+    </tbody>
+</table>
