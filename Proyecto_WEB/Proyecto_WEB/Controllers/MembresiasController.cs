@@ -6,31 +6,53 @@ namespace Proyecto_WEB.Controllers
 {
     public class MembresiasController : Controller
     {
-        private readonly HttpClient _httpClient;
-        private readonly string _urlApi = "https://localhost:5001/api/Membresias/ObtenerMembresias";
+        private readonly IHttpClientFactory _http;
+        private readonly IConfiguration _conf;
 
-        public MembresiasController(IConfiguration configuration)
+        public MembresiasController(IHttpClientFactory http, IConfiguration conf)
         {
-            _urlApi = configuration["Variables:UrlApi"] ?? "https://localhost:5001/api/";
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri(_urlApi)
-            };
+            _http = http;
+            _conf = conf;
         }
-        public async Task<IActionResult> Index()
+
+        [HttpGet]
+        public IActionResult Index()
         {
-            var response = await _httpClient.GetAsync("Membresias/ObtenerMembresias");
-
-            if (response.IsSuccessStatusCode)
+            using (var client = _http.CreateClient())
             {
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                var membresias = JsonSerializer.Deserialize<List<Membresia>>(jsonResponse);
+                string url = _conf.GetSection("Variables:UrlApi").Value + "Membresias/ObtenerMembresias";
 
-                return View(membresias);
-            }
-            else
-            {
-                ViewBag.Error = "No se pudieron obtener las membresías.";
+                try
+                {
+                    var response = client.GetAsync(url).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = response.Content.ReadFromJsonAsync<JsonElement>().Result;
+
+                        // Verificar si la respuesta es exitosa y contiene datos
+                        if (result.TryGetProperty("success", out var success) && success.GetBoolean() &&
+                            result.TryGetProperty("data", out var data) && data.ValueKind == JsonValueKind.Array)
+                        {
+                            // Deserializar la lista de membresías
+                            var datosContenido = JsonSerializer.Deserialize<List<Membresia>>(data.ToString());
+                            return View(datosContenido);
+                        }
+                        else
+                        {
+                            ViewBag.ErrorMessage = "No se encontraron membresías.";
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.ErrorMessage = "Error al conectar con la API.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = $"Ocurrió un error al conectarse con la API: {ex.Message}";
+                }
+
                 return View(new List<Membresia>());
             }
         }

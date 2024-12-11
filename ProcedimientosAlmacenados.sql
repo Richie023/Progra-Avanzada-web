@@ -1,3 +1,6 @@
+USE [Gym]
+GO
+
 CREATE PROCEDURE [dbo].[CrearCliente]
     @Username VARCHAR(8),
     @Contrasenna VARCHAR(255),
@@ -66,7 +69,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE RegistrarEmpleado
+CREATE PROCEDURE [dbo].[RegistrarEmpleado]
     @Nombre NVARCHAR(100),
     @Apellidos NVARCHAR(100),
     @FechaNacimiento DATE,
@@ -82,6 +85,7 @@ BEGIN
     VALUES (@Nombre, @Apellidos, @FechaNacimiento, @Telefono, @Email, @Direccion, @FechaContratacion, @CargoID, @UsuarioID);
 END;
 GO
+
 CREATE PROCEDURE [dbo].[ObtenerMembresias]
 AS
 BEGIN

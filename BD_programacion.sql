@@ -33,7 +33,7 @@ CREATE TABLE Empleado (
 	UsuarioID BIGINT NOT NULL,
     Nombre VARCHAR(255) NOT NULL,
 	Apellidos VARCHAR (255) NOT NULL,
-    FechaNacimiento DATETIME NOT NULL,
+    FechaNacimiento DATE NOT NULL,
     Telefono INT NOT NULL ,
 	Email VARCHAR (255) ,
 	Direccion VARCHAR (255) ,
@@ -41,7 +41,6 @@ CREATE TABLE Empleado (
     CargoID INT ,
 	FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID),
 	FOREIGN KEY (CargoID) References Cargo (CargoID)
-    
 );
 
 CREATE TABLE Membresia (
@@ -138,6 +137,7 @@ INSERT INTO Rol (NombreRol) VALUES ('Administrador');
 INSERT INTO Rol (NombreRol) VALUES ('Empleado');
 INSERT INTO Rol (NombreRol) VALUES ('Cliente');
 GO
+
 INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
 VALUES ('Admin1', 'Pnn5xk+wGxFNmOjdqJiICA==', 1, 0, GETDATE(), 1);
 --Contraseña : Password123
@@ -145,6 +145,10 @@ GO
 INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
 VALUES ('usuario1', 'Pnn5xk+wGxFNmOjdqJiICA==', 1, 0, GETDATE(), 2);
 --Contraseña : Password123
+GO
+
+INSERT INTO Cargo (NombreCargo)
+VALUES ('Entrenador');
 GO
 
 INSERT INTO Empleado
@@ -159,11 +163,6 @@ INSERT INTO Empleado
       ,CargoID)
 VALUES 
       ( 2, 'Juan', 'Pérez', '1985-05-15', '123456789', 'juan.perez@example.com', '123 Calle Principal', '2024-01-15', 1);
-GO
-
-
-INSERT INTO Cargo (NombreCargo)
-VALUES ('Entrenador');
 GO
 
 INSERT INTO Membresia (TipoMembresia, Precio, Duracion, Beneficios) 

@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Dapper;
+using System.Data;
 using Proyecto_API.Models;
 
 namespace Proyecto_API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class MembresiasController : ControllerBase
     {
         private readonly IConfiguration _conf;
@@ -18,18 +19,28 @@ namespace Proyecto_API.Controllers
 
         [HttpGet]
         [Route("ObtenerMembresias")]
-        public IActionResult ObtenerMembresias()
+        public async Task<IActionResult> ObtenerMembresias()
         {
-            using (var context = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
+            using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
             {
-                var membresias = context.Query<Membresia>("ObtenerMembresias").ToList();
-
-                if (membresias == null || !membresias.Any())
+                try
                 {
-                    return NotFound(new { Mensaje = "No se encontraron membresías." });
-                }
+                    var membresias = await connection.QueryAsync<Membresia>(
+                        "ObtenerMembresias",
+                        commandType: CommandType.StoredProcedure
+                    );
 
-                return Ok(membresias);
+                    if (membresias == null || !membresias.Any())
+                    {
+                        return NotFound(new { success = false, message = "No se encontraron membresías." });
+                    }
+
+                    return Ok(new { success = true, data = membresias });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new { success = false, message = ex.Message });
+                }
             }
         }
     }
