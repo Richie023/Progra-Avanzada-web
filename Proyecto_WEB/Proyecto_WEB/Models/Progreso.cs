@@ -4,10 +4,9 @@
     {
         public long ProgresoID { get; set; }
         public long UsuarioID { get; set; }
-        public int PlanEntrenamientoID { get; set; }
+        public decimal Peso { get; set; }
+        public int CantidadEJercicios { get; set; }
+        public int DuracionEntrenamiento { get; set; }
         public DateTime FechaRegistro { get; set; }
-        public decimal PesoEntrenamiento { get; set; }
-        public int RepeticionesCompletadas { get; set; }
-        public int TiempoEntrenamiento { get; set; }
     }
 }

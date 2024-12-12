@@ -28,10 +28,9 @@ namespace Proyecto_API.Controllers
                     var result = connection.Execute("RegistrarProgreso", new
                     {
                         model.UsuarioID,
-                        model.PlanEntrenamientoID,
-                        model.PesoEntrenamiento,
-                        model.RepeticionesCompletadas,
-                        model.TiempoEntrenamiento
+                        model.Peso,
+                        model.CantidadEJercicios,
+                        model.DuracionEntrenamiento
                     }, commandType: CommandType.StoredProcedure);
 
                     if (result > 0)

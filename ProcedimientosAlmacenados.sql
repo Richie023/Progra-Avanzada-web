@@ -247,14 +247,13 @@ GO
 
 CREATE PROCEDURE [dbo].[RegistrarProgreso]
     @UsuarioID BIGINT,
-    @PlanEntrenamientoID INT,
-    @PesoEntrenamiento DECIMAL(5,2),
-    @RepeticionesCompletadas INT,
-    @TiempoEntrenamiento INT
+    @Peso DECIMAL(5,2),
+	@CantidadEjercicios INT,
+	@DuracionEntrenamiento INT    
 AS
 BEGIN    
-    INSERT INTO Progreso (UsuarioID, PlanEntrenamientoID, FechaRegistro, PesoEntrenamiento, RepeticionesCompletadas, TiempoEntrenamiento)
-    VALUES (@UsuarioID, @PlanEntrenamientoID, GETDATE(), @PesoEntrenamiento, @RepeticionesCompletadas, @TiempoEntrenamiento);
+    INSERT INTO Progreso (UsuarioID, Peso, CantidadEjercicios, DuracionEntrenamiento, FechaRegistro)
+    VALUES (@UsuarioID, @Peso, @CantidadEjercicios,	@DuracionEntrenamiento, GETDATE());
 END
 GO
 
@@ -265,11 +264,10 @@ BEGIN
     SELECT 
         ProgresoID,
         UsuarioID,
-        PlanEntrenamientoID,
-        FechaRegistro,
-        PesoEntrenamiento,
-        RepeticionesCompletadas,
-        TiempoEntrenamiento
+        Peso,
+		CantidadEjercicios,
+		DuracionEntrenamiento,
+        FechaRegistro        
     FROM 
 		Progreso
     WHERE 

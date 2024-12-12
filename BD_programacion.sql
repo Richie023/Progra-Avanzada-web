@@ -136,13 +136,11 @@ CREATE TABLE PlanEntrenamiento (
 CREATE TABLE Progreso (
     ProgresoID BIGINT PRIMARY KEY IDENTITY (1,1),
     UsuarioID BIGINT NOT NULL,
-    PlanEntrenamientoID INT NOT NULL,
-    FechaRegistro DATETIME NOT NULL DEFAULT GETDATE(),
-    PesoEntrenamiento DECIMAL(5,2),
-    RepeticionesCompletadas INT,
-	TiempoEntrenamiento INT,
-    FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID),
-    FOREIGN KEY (PlanEntrenamientoID) REFERENCES PlanEntrenamiento(PlanEntrenamientoID)
+    Peso DECIMAL(5,2),
+    CantidadEjercicios INT,
+	DuracionEntrenamiento INT,
+	FechaRegistro DATETIME NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID)
 );
 
 INSERT INTO Rol (NombreRol) VALUES ('Administrador');

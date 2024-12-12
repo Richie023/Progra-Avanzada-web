@@ -6,33 +6,18 @@
 
 <form asp-action="CrearProgreso" method="post">
     <div class="form-group">
-        <label for="PesoEntrenamiento">Peso Entrenamiento (kg):</label>
-        <input type="number" id="PesoEntrenamiento" name="PesoEntrenamiento" class="form-control" value="@Model.PesoEntrenamiento" step="0.1" required />
+        <label for="Peso">Peso Actual (kg):</label>
+        <input type="number" id="Peso" name="Peso" class="form-control" value="@Model.Peso" step="0.1" required />
     </div>
     <div class="form-group">
-        <label for="RepeticionesCompletadas">Repeticiones Completadas:</label>
-        <input type="number" id="RepeticionesCompletadas" name="RepeticionesCompletadas" class="form-control" value="@Model.RepeticionesCompletadas" required />
+        <label for="CantidadEJercicios">Ejercicios Realizados:</label>
+        <input type="number" id="CantidadEJercicios" name="CantidadEJercicios" class="form-control" value="@Model.CantidadEJercicios" required />
     </div>
     <div class="form-group">
-        <label for="TiempoEntrenamiento">Tiempo Entrenamiento (minutos):</label>
-        <input type="number" id="TiempoEntrenamiento" name="TiempoEntrenamiento" class="form-control" value="@Model.TiempoEntrenamiento" step="0.1" required />
-    </div>
-    <div class="form-group">
-        <label for="PlanEntrenamientoID">Plan de Entrenamiento:</label>
-        <select id="PlanEntrenamientoID" name="PlanEntrenamientoID" class="form-control" required>
-            <option value="">Seleccionar Plan</option>
-            @if (ViewData["PlanesEntrenamiento"] is SelectList planesList)
-            {
-                foreach (var plan in planesList)
-                {
-                    <option value="@plan.Value">@plan.Text</option>
-                }
-            }
-            else
-            {
-                <option>No hay planes disponibles</option>
-            }
-        </select>
-    </div>
+        <label for="DuracionEntrenamiento">Duración del Entrenamiento (minutos):</label>
+        <input type="number" id="DuracionEntrenamiento" name="DuracionEntrenamiento" class="form-control" value="@Model.DuracionEntrenamiento" step="0.1" required />
+    </div>    
+    <input type="hidden" asp-for="UsuarioID" value="@Model.UsuarioID" />
+    <input type="hidden" name="FechaRegistro" value="@DateTime.Now" />
     <button type="submit" class="btn btn-primary">Registrar Progreso</button>
 </form>
