@@ -220,7 +220,6 @@ BEGIN
 	   Repeticiones,
 	   Peso,
 	   FechaCreacion
-	
     FROM 
        PlanEntrenamiento
 END
@@ -243,5 +242,39 @@ BEGIN
         UsuarioID = @UsuarioID
     ORDER BY 
         FechaCreacion DESC;
+END
+GO
+
+CREATE PROCEDURE [dbo].[RegistrarProgreso]
+    @UsuarioID BIGINT,
+    @PlanEntrenamientoID INT,
+    @PesoEntrenamiento DECIMAL(5,2),
+    @RepeticionesCompletadas INT,
+    @TiempoEntrenamiento INT
+AS
+BEGIN    
+    INSERT INTO Progreso (UsuarioID, PlanEntrenamientoID, FechaRegistro, PesoEntrenamiento, RepeticionesCompletadas, TiempoEntrenamiento)
+    VALUES (@UsuarioID, @PlanEntrenamientoID, GETDATE(), @PesoEntrenamiento, @RepeticionesCompletadas, @TiempoEntrenamiento);
+END
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarProgreso]
+    @UsuarioID BIGINT
+AS
+BEGIN
+    SELECT 
+        ProgresoID,
+        UsuarioID,
+        PlanEntrenamientoID,
+        FechaRegistro,
+        PesoEntrenamiento,
+        RepeticionesCompletadas,
+        TiempoEntrenamiento
+    FROM 
+		Progreso
+    WHERE 
+		UsuarioID = @UsuarioID
+    ORDER BY 
+		FechaRegistro DESC;
 END
 GO

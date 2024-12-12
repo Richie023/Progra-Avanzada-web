@@ -1,0 +1,38 @@
+﻿@model Proyecto_WEB.Models.Progreso
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<h1>Registrar Progreso</h1>
+
+<form asp-action="CrearProgreso" method="post">
+    <div class="form-group">
+        <label for="PesoEntrenamiento">Peso Entrenamiento (kg):</label>
+        <input type="number" id="PesoEntrenamiento" name="PesoEntrenamiento" class="form-control" value="@Model.PesoEntrenamiento" step="0.1" required />
+    </div>
+    <div class="form-group">
+        <label for="RepeticionesCompletadas">Repeticiones Completadas:</label>
+        <input type="number" id="RepeticionesCompletadas" name="RepeticionesCompletadas" class="form-control" value="@Model.RepeticionesCompletadas" required />
+    </div>
+    <div class="form-group">
+        <label for="TiempoEntrenamiento">Tiempo Entrenamiento (minutos):</label>
+        <input type="number" id="TiempoEntrenamiento" name="TiempoEntrenamiento" class="form-control" value="@Model.TiempoEntrenamiento" step="0.1" required />
+    </div>
+    <div class="form-group">
+        <label for="PlanEntrenamientoID">Plan de Entrenamiento:</label>
+        <select id="PlanEntrenamientoID" name="PlanEntrenamientoID" class="form-control" required>
+            <option value="">Seleccionar Plan</option>
+            @if (ViewData["PlanesEntrenamiento"] is SelectList planesList)
+            {
+                foreach (var plan in planesList)
+                {
+                    <option value="@plan.Value">@plan.Text</option>
+                }
+            }
+            else
+            {
+                <option>No hay planes disponibles</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Registrar Progreso</button>
+</form>

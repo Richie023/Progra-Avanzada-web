@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Proyecto_WEB.Models
+﻿namespace Proyecto_WEB.Models
 {
     public class PlanEntrenamiento
     {

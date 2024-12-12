@@ -3,7 +3,6 @@ using Microsoft.Data.SqlClient;
 using Dapper;
 using Proyecto_API.Models;
 using System.Data;
-using System.Security.Claims;
 
 namespace Proyecto_API.Controllers
 {
