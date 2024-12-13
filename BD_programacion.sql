@@ -143,6 +143,17 @@ CREATE TABLE Progreso (
     FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID)
 );
 
+CREATE TABLE Producto (
+    ProductoID INT PRIMARY KEY IDENTITY(1,1),
+    Nombre VARCHAR(100) NOT NULL,
+    Descripcion VARCHAR(255) NULL,
+    Precio DECIMAL(10, 2) NOT NULL,
+    Stock INT NOT NULL,
+	Imagen VARCHAR(50) NOT NULL,
+	Activo BIT NOT NULL ,
+    FechaIngreso DATETIME NOT NULL DEFAULT GETDATE()
+);
+
 INSERT INTO Rol (NombreRol) VALUES ('Administrador');
 INSERT INTO Rol (NombreRol) VALUES ('Empleado');
 INSERT INTO Rol (NombreRol) VALUES ('Cliente');
@@ -154,6 +165,10 @@ VALUES ('Admin1', 'Pnn5xk+wGxFNmOjdqJiICA==', 1, 0, GETDATE(), 1);
 GO
 INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
 VALUES ('usuario1', 'Pnn5xk+wGxFNmOjdqJiICA==', 1, 0, GETDATE(), 2);
+--Contraseña : Password123
+GO
+INSERT INTO Usuario (Username, Contrasenna, Activo, ClaveTemp, Vigencia, RolID)
+VALUES ('cliente1', 'Pnn5xk+wGxFNmOjdqJiICA==', 1, 0, GETDATE(), 3);
 --Contraseña : Password123
 GO
 

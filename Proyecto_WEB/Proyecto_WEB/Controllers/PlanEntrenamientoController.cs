@@ -117,6 +117,11 @@ namespace Proyecto_WEB.Controllers
         [HttpGet]
         public IActionResult PlanUsuario()
         {
+            if (HttpContext.Session.GetString("Consecutivo") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
             long usuarioId = long.Parse(HttpContext.Session.GetString("Consecutivo")!);
 
             using (var client = _http.CreateClient())

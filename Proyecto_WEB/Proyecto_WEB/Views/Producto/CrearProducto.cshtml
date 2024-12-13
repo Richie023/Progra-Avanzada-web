@@ -1,0 +1,32 @@
+﻿@model Proyecto_WEB.Models.Producto
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Registrar Producto</h1>
+<form asp-action="CrearProducto" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="Nombre">Nombre del Producto:</label>
+        <input type="text" id="Nombre" name="Nombre" class="form-control" value="@Model.Nombre" required />
+    </div>
+    <div class="form-group">
+        <label for="Descripcion">Descripción:</label>
+        <input type="text" id="Descripcion" name="Descripcion" class="form-control" value="@Model.Descripcion" />
+    </div>
+    <div class="form-group">
+        <label for="Precio">Precio:</label>
+        <input type="number" id="Precio" name="Precio" class="form-control" value="@Model.Precio" step="0.01" required />
+    </div>
+    <div class="form-group">
+        <label for="Stock">Stock:</label>
+        <input type="number" id="Stock" name="Stock" class="form-control" value="@Model.Stock" required />
+    </div>
+    <div class="form-group">
+        <label for="ImagenArchivo">Imagen del Producto:</label>
+        <input type="file" id="ImagenArchivo" name="ImagenArchivo" class="form-control" accept="image/png" />
+    </div>
+
+    <input type="hidden" asp-for="FechaIngreso" value="@DateTime.Now" />
+    <input type="hidden" asp-for="Activo" value="true" />
+    <button type="submit" class="btn btn-primary">Registrar Producto</button>
+</form>

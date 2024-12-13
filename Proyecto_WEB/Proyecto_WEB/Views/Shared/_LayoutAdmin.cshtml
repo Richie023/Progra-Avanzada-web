@@ -37,17 +37,24 @@
                         </div>
                         <ul class="nav">
                             <li class="nav-item">
-                                <a href="" class="nav-link with-sub"><i class="typcn typcn-group"></i> Empleados</a>
+                                <a href="" class="nav-link with-sub"><i class="fa fa-users" style="margin-right: 8px;"></i> Empleados</a>
                                 <nav class="az-menu-sub">
                                     <a asp-controller="Empleado" asp-action="RegEmpleados" class="nav-link">Registrar Empleado</a>
                                     <a asp-controller="Empleado" asp-action="ListEmpleados" class="nav-link">Lista de Empleados</a>
                                 </nav>
                             </li>
                             <li class="nav-item">
+                                <a href="" class="nav-link with-sub"><i class="fa fa-file" style="margin-right: 8px;"></i> Inventario</a>
+                                <nav class="az-menu-sub">
+                                    <a asp-controller="Producto" asp-action="CrearProducto" class="nav-link">Registrar Producto</a>
+                                    <a asp-controller="Producto" asp-action="ListaProductosAdmin" class="nav-link">Lista de Productos</a>
+                                </nav>
+                            </li>                            
+                            <li class="nav-item">
                                 <a href="" class="nav-link with-sub"><i class="fas fa-dumbbell" style="margin-right: 8px;"></i> Planes de Entrenamiento</a>
                                 <nav class="az-menu-sub">
-                                    <a asp-controller="PlanEntrenamiento" asp-action="CrearPlan" class="nav-link">Crear Plan de Entrenamiento</a>
-                                    <a asp-controller="PlanEntrenamiento" asp-action="ListaPlan" class="nav-link">Ver Todos los Planes de Entrenamiento</a>
+                                    <a asp-controller="PlanEntrenamiento" asp-action="CrearPlan" class="nav-link">Registrar Plan de Entrenamiento</a>
+                                    <a asp-controller="PlanEntrenamiento" asp-action="ListaPlan" class="nav-link">Lista de Planes de Entrenamiento</a>
                                 </nav>
                             </li>
                             <li class="nav-item">

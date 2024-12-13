@@ -276,3 +276,65 @@ BEGIN
 		FechaRegistro DESC;
 END
 GO
+
+CREATE PROCEDURE [dbo].[RegistrarProducto]
+    @Nombre VARCHAR(100),
+    @Descripcion VARCHAR(255) = NULL,
+    @Precio DECIMAL(10, 2),
+    @Stock INT,
+    @Imagen VARCHAR(50),
+    @Activo BIT
+AS
+BEGIN
+    INSERT INTO Producto (Nombre, Descripcion, Precio, Stock, Imagen, Activo, FechaIngreso)
+    VALUES (@Nombre, @Descripcion, @Precio, @Stock, @Imagen, @Activo, GETDATE());
+END;
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarProductos]
+AS
+BEGIN
+    SELECT ProductoID, Nombre, Descripcion, Precio, Stock, Imagen, Activo, FechaIngreso
+    FROM Producto;
+END;
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarProducto]
+    @ProductoID INT
+AS
+BEGIN
+    SELECT ProductoID, Nombre, Descripcion, Precio, Stock, Imagen, Activo, FechaIngreso
+    FROM Producto
+    WHERE ProductoID = @ProductoID;
+END;
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarProductosActivos]
+AS
+BEGIN
+    SELECT ProductoID, Nombre, Descripcion, Precio, Stock, Imagen, Activo, FechaIngreso
+    FROM Producto
+    WHERE Activo = 1;
+END;
+GO
+
+CREATE PROCEDURE [dbo].[ActualizarProducto]
+    @ProductoID INT,
+    @Nombre VARCHAR(100),
+    @Descripcion VARCHAR(255) = NULL,
+    @Precio DECIMAL(10, 2),
+    @Stock INT,
+    @Imagen VARCHAR(50),
+    @Activo BIT
+AS
+BEGIN
+    UPDATE Producto
+    SET Nombre = @Nombre,
+        Descripcion = @Descripcion,
+        Precio = @Precio,
+        Stock = @Stock,
+        Imagen = @Imagen,
+        Activo = @Activo
+    WHERE ProductoID = @ProductoID;
+END;
+GO

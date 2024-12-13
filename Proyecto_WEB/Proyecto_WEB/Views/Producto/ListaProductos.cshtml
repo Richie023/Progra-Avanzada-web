@@ -1,0 +1,39 @@
+﻿@model List<Proyecto_WEB.Models.Producto>
+
+@{
+    ViewData["Title"] = "Catálogo de Productos";
+}
+
+<h2>Catálogo de Productos</h2>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+}
+
+<div class="row">
+    @foreach (var producto in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-80">
+                @if (string.IsNullOrEmpty(producto.Imagen))
+                {
+                    <img src="/images/default.jpg" class="card-img-top" alt="Imagen no disponible">
+                }
+                else
+                {
+                    <img src="@producto.Imagen" class="card-img-top" alt="@producto.Nombre">
+                }
+
+                <div class="card-body">
+                    <h5 class="card-title">@producto.Nombre</h5>
+                    <p class="card-text">
+                        Precio: $@producto.Precio <br />
+                        Stock: @producto.Stock <br />
+                    </p>
+                    <a href="@Url.Action("ConsultarProducto", "Producto", new { productoId = producto.ProductoID })" class="btn btn-primary">Ver detalles</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
