@@ -1,42 +1,100 @@
 ﻿@model List<Proyecto_WEB.Models.Producto>
 
 @{
-    ViewData["Title"] = "Catálogo de Productos";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Catálogo de Productos</h2>
+<h1>Lista de Productos</h1>
 
-@if (ViewBag.ErrorMessage != null)
-{
-    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
-}
+<h2>@ViewData["Title"]</h2>
 
-<div class="row">
-    @foreach (var producto in Model)
-    {
-        <div class="col-md-4 mb-4">
-            <div class="card h-80">
-                @if (string.IsNullOrEmpty(producto.Imagen))
-                {
-                    <img src="/images/default.jpg" class="card-img-top" alt="Imagen no disponible">
-                }
-                else
-                {
-                    <img src="@producto.Imagen" class="card-img-top" alt="@producto.Nombre">
-                }
+<div class="table-responsive">
+    <table id="example" class="table text-nowrap align-middle mb-0">
+        <thead>
+            <tr class="border-2 border-bottom border-primary border-0">
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Precio ($)</th>
+                <th>Unidades Disponibles</th>
+                <th>Imagen</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductoID</td>
+                    <td>@item.Nombre</td>
+                    <td>$@item.Precio.ToString("N2")</td>
+                    <td>@item.Stock</td>
+                    <td><img src="@item.Imagen" style="width:160px; height:170px;"></td>
+                    <td>@item.Estado</td>
+                    <td>
 
-                <div class="card-body">
-                    <h5 class="card-title">@producto.Nombre</h5>
-                    <p class="card-text">
-                        Precio: $@producto.Precio <br />
-                        Stock: @producto.Stock <br />
-                    </p>
-                    <a href="@Url.Action("ConsultarProducto", "Producto", new { productoId = producto.ProductoID })" class="btn btn-primary">Ver detalles</a>
-                    <a href="@Url.Action("EditarProducto", "Producto", new { productoId = producto.ProductoID })" class="btn btn-warning">Editar</a>
-                    <a href="@Url.Action("EliminarProducto", "Producto", new { productoId = producto.ProductoID })" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?')">Eliminar</a>
+                        <a href="@Url.Action("EditarProducto","Producto", new { ProductoID = item.ProductoID })" class="btn">
+                            <i class="fa fa-edit" style="font-size:1.6em;"></i>
+                        </a>
+
+                        <a id="AbrirModal" href="#" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                           data-productoID="@item.ProductoID" data-nombre="@item.Nombre">
+                            <i class="fa fa-trash" style="font-size:1.6em;"></i>
+                        </a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:650px">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form asp-action="ActualizarEstado" asp-controller="Producto">
+                <div class="modal-body">
+
+                    <input type="hidden" id="ProductoID" name="ProductoID" value="">
+                    ¿Desea cambiar el estado del producto <label id="Nombre"></label>?
 
                 </div>
-            </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Actualizar Estado</button>
+                </div>
+            </form>
+
         </div>
-    }
+    </div>
 </div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $("#example").DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-ES.json',
+            },
+            columnDefs: [
+                { targets: [0, 1, 2, 3, 4], type: "string" }
+            ]
+        });
+
+    });
+
+    $(document).on("click", "#AbrirModal", function () {
+
+        $("#ProductoID").val($(this).attr("data-productoID"));
+        $("#Nombre").text($(this).attr("data-nombre"));
+
+    });
+
+</script>

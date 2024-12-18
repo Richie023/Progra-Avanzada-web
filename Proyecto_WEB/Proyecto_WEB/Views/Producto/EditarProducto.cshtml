@@ -5,16 +5,18 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Crear Producto</h1>
+<h1>Editar Producto</h1>
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="CrearProducto" asp-controller="Producto" enctype="multipart/form-data">
+<form asp-action="EditarProducto" asp-controller="Producto" enctype="multipart/form-data">
+    <input type="hidden" asp-for="ProductoID" class="form-control">
+
     <div class="mb-3">
         <label class="form-label">Nombre</label>
         <input type="text" asp-for="Nombre" class="form-control">
     </div>
-    
+
     <div class="mb-3">
         <label class="form-label">Precio ($)</label>
         <input type="text" asp-for="Precio" class="form-control">
@@ -25,10 +27,16 @@
         <input type="text" asp-for="Stock" class="form-control">
     </div>
 
-    <div class="mb-4">
-        <label class="form-label">Imagen</label>
-        <input type="file" class="form-control" accept="image/png" id="ImagenProducto" name="ImagenProducto">
+    <div class="mb-3 row">
+        <div class="col-9">
+            <label class="form-label">Imagen</label>
+            <input type="file" class="form-control" accept="image/png" id="ImagenProducto" name="ImagenProducto">
+        </div>
+        <div class="col-3 text-center">
+            <img src="@Model.Imagen" style="width:180px; height:200px">
+        </div>
     </div>
 
     <button type="submit" class="btn btn-primary">Registrar Producto</button>
+
 </form>

@@ -144,14 +144,12 @@ CREATE TABLE Progreso (
 );
 
 CREATE TABLE Producto (
-    ProductoID INT PRIMARY KEY IDENTITY(1,1),
+    ProductoID BIGINT PRIMARY KEY IDENTITY(1,1),
     Nombre VARCHAR(100) NOT NULL,
-    Descripcion VARCHAR(255) NULL,
     Precio DECIMAL(10, 2) NOT NULL,
     Stock INT NOT NULL,
-	Imagen VARCHAR(50) NOT NULL,
-	Activo BIT NOT NULL ,
-    FechaIngreso DATETIME NOT NULL DEFAULT GETDATE()
+    Imagen VARCHAR(50) NOT NULL,
+    Activo BIT NOT NULL
 );
 
 INSERT INTO Rol (NombreRol) VALUES ('Administrador');

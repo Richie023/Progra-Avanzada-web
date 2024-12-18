@@ -277,64 +277,98 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE [dbo].[RegistrarProducto]
-    @Nombre VARCHAR(100),
-    @Descripcion VARCHAR(255) = NULL,
-    @Precio DECIMAL(10, 2),
-    @Stock INT,
-    @Imagen VARCHAR(50),
-    @Activo BIT
+CREATE PROCEDURE [dbo].[ConsultarProductos]
+	
 AS
 BEGIN
-    INSERT INTO Producto (Nombre, Descripcion, Precio, Stock, Imagen, Activo, FechaIngreso)
-    VALUES (@Nombre, @Descripcion, @Precio, @Stock, @Imagen, @Activo, GETDATE());
-END;
+	
+	SELECT	ProductoID,
+			Nombre,
+			Precio,
+			Stock,
+			Imagen + CONVERT(VARCHAR,ProductoID) + '.png' Imagen,
+			Activo,
+			CASE WHEN Activo = 1 THEN 'Activo' ELSE 'Inactivo' END Estado
+	  FROM	Producto
+
+END
 GO
 
-CREATE PROCEDURE [dbo].[ConsultarProductos]
+CREATE PROCEDURE [dbo].[ActualizarEstado]
+	@ProductoID bigint
 AS
 BEGIN
-    SELECT ProductoID, Nombre, Descripcion, Precio, Stock, Imagen, Activo, FechaIngreso
-    FROM Producto;
-END;
+	
+	UPDATE	Producto
+	SET		Activo = CASE WHEN Activo = 1 THEN 0 ELSE 1 END
+	WHERE	ProductoID = @ProductoID
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[RegistrarProducto]
+	@Nombre varchar(50),
+	@Precio decimal(18,2),
+	@Stock int,
+	@Imagen varchar(50)
+AS
+BEGIN
+	
+	INSERT INTO Producto (Nombre,Precio,Stock,Imagen,Activo)
+	VALUES (@Nombre, @Precio, @Stock, @Imagen, 1)
+
+	SELECT @@IDENTITY ProductoID
+
+END
 GO
 
 CREATE PROCEDURE [dbo].[ConsultarProducto]
-    @ProductoID INT
+	@ProductoID BIGINT
 AS
 BEGIN
-    SELECT ProductoID, Nombre, Descripcion, Precio, Stock, Imagen, Activo, FechaIngreso
-    FROM Producto
-    WHERE ProductoID = @ProductoID;
-END;
+	
+	SELECT	ProductoID,
+			Nombre,
+			Precio,
+			Stock,
+			Imagen + CONVERT(VARCHAR,ProductoID) + '.png' Imagen,
+			Activo,
+			CASE WHEN Activo = 1 THEN 'Activo' ELSE 'Inactivo' END Estado
+	  FROM	Producto
+	  WHERE ProductoID = @ProductoID
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[ActualizarProducto]
+	@ProductoID bigint,
+	@Nombre varchar(50),
+	@Precio decimal(18,2),
+	@Stock int
+AS
+BEGIN
+	
+	UPDATE Producto
+	SET	Nombre = @Nombre,
+		Precio = @Precio,
+		Stock = @Stock
+	WHERE ProductoID = @ProductoID
+
+END
 GO
 
 CREATE PROCEDURE [dbo].[ConsultarProductosActivos]
 AS
 BEGIN
-    SELECT ProductoID, Nombre, Descripcion, Precio, Stock, Imagen, Activo, FechaIngreso
-    FROM Producto
-    WHERE Activo = 1;
-END;
+    SELECT  ProductoID,
+            Nombre,
+            Precio,
+            Stock,
+            Imagen + CONVERT(VARCHAR, ProductoID) + '.png' AS Imagen,
+            Activo,
+            'Activo' AS Estado -- Ya que solo mostrará productos activos, esto siempre será 'Activo'
+    FROM    Producto
+    WHERE   Activo = 1; -- Filtra solo los productos activos
+END
 GO
 
-CREATE PROCEDURE [dbo].[ActualizarProducto]
-    @ProductoID INT,
-    @Nombre VARCHAR(100),
-    @Descripcion VARCHAR(255) = NULL,
-    @Precio DECIMAL(10, 2),
-    @Stock INT,
-    @Imagen VARCHAR(50),
-    @Activo BIT
-AS
-BEGIN
-    UPDATE Producto
-    SET Nombre = @Nombre,
-        Descripcion = @Descripcion,
-        Precio = @Precio,
-        Stock = @Stock,
-        Imagen = @Imagen,
-        Activo = @Activo
-    WHERE ProductoID = @ProductoID;
-END;
-GO
