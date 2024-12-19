@@ -30,9 +30,16 @@
         <label for="UsuarioID">Usuario:</label>
         <select id="UsuarioID" name="UsuarioID" class="form-control" required>
             <option value="">Seleccionar Usuario</option>
-            @foreach (var usuario in ViewData["Usuarios"] as SelectList)
+            @if (ViewData["Usuarios"] is SelectList usuariosSelectList)
             {
-                <option value="@usuario.Value">@usuario.Text</option>
+                foreach (var usuario in usuariosSelectList)
+                {
+                    <option value="@usuario.Value">@usuario.Text</option>
+                }
+            }
+            else
+            {
+                <option disabled>Usuarios no disponibles</option>
             }
         </select>
     </div>

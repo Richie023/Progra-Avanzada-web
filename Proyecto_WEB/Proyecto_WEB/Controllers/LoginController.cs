@@ -42,7 +42,7 @@ namespace Proyecto_WEB.Controllers
                 if (result != null && result.Codigo == 0)
                 {
                     var datosUsuario = JsonSerializer.Deserialize<Usuario>((JsonElement)result.Contenido!);
-                    if (datosUsuario.ClaveTemp == true)
+                    if (datosUsuario!.ClaveTemp == true)
                     {
                         HttpContext.Session.SetString("Consecutivo", datosUsuario!.UsuarioID.ToString());
                         return RedirectToAction("ChangePassword", "Login");
@@ -119,7 +119,7 @@ namespace Proyecto_WEB.Controllers
                 {
                     return RedirectToAction("Login", "Login");
                 }
-                else if (result.Codigo == 0)
+                else if (result!.Codigo == 0)
                 {
                     ViewBag.Mensaje = "Ocurrió un error";
                     return View();

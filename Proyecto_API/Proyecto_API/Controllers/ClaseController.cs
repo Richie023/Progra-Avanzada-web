@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Proyecto_API.Models;
 using Microsoft.Data.SqlClient;
 using Dapper;
-using Proyecto_API.Models;
 
 namespace Proyecto_API.Controllers
 {
