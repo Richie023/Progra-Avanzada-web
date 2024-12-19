@@ -1,15 +1,9 @@
 ﻿@model List<Proyecto_WEB.Models.Membresia>
 
-@{
-    ViewData["Title"] = "Membresías";
-}
+<h1>Membresías</h1>
 
-<h2>Membresías</h2>
 
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger">@ViewBag.Error</div>
-}
+<h2>@ViewData["Title"]</h2>
 
 <div class="row">
     @foreach (var membresia in Model)
@@ -36,7 +30,25 @@
                         Duración: @membresia.Duracion <br />
                         Beneficios: @membresia.Beneficios
                     </p>
-                    <a href="#" class="btn btn-primary">Ver detalles</a>
+
+                    @if (membresia.MembresiaID == 1)
+                    {
+                        <form method="get" action="@Url.Action("SinMembresia", "Membresias")">
+                            <button type="submit" class="btn btn-primary">Actualizar Sin Membresía</button>
+                        </form>
+                    }
+                    else if (membresia.MembresiaID == 2)
+                    {
+                        <form method="get" action="@Url.Action("MembresiaRegular", "Membresias")">
+                            <button type="submit" class="btn btn-primary">Actualizar Membresía Regular</button>
+                        </form>
+                    }
+                    else if (membresia.MembresiaID == 3)
+                    {
+                        <form method="get" action="@Url.Action("MembresiaPremium", "Membresias")">
+                            <button type="submit" class="btn btn-primary">Actualizar Membresía Premium</button>
+                        </form>
+                    }
                 </div>
             </div>
         </div>

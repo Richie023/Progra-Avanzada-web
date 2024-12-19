@@ -1,0 +1,21 @@
+﻿@model Proyecto_WEB.Models.Miembro
+
+@{
+    ViewData["Title"] = "Actualizar Sin Membresía";
+}
+
+<h2>Actualizar a Membresía Premium</h2>
+
+<form method="post" asp-action="ActualizarMembresiaPremium" asp-controller="Membresias">
+    <div class="mb-3">
+        <label for="Nombre" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="Nombre" name="Nombre" value="@Model.Nombre" readonly />
+    </div>
+    <div class="mb-3">
+        <label for="Email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" readonly />
+    </div>
+    <input type="hidden" name="UsuarioID" value="@Model.UsuarioID" />
+
+    <button type="submit" class="btn btn-primary">Actualizar Membresía</button>
+</form>

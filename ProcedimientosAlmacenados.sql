@@ -372,3 +372,53 @@ BEGIN
 END
 GO
 
+ALTER PROCEDURE [dbo].[ActualizarSinMembresia]
+    @UsuarioID bigint
+AS
+BEGIN
+    UPDATE Miembro
+    SET MembresiaID = 1
+    WHERE UsuarioID = @UsuarioID;
+END;
+GO
+
+ALTER PROCEDURE [dbo].[ActualizarMembresiaRegular]
+    @UsuarioID bigint
+AS
+BEGIN
+    UPDATE Miembro
+    SET MembresiaID = 2
+    WHERE UsuarioID = @UsuarioID;
+END;
+GO
+
+ALTER PROCEDURE [dbo].[ActualizarMembresiaPremium]
+    @UsuarioID bigint
+AS
+BEGIN
+    UPDATE Miembro
+    SET MembresiaID = 3
+    WHERE UsuarioID = @UsuarioID;
+END;
+GO
+
+ALTER PROCEDURE [dbo].[ConsultarMiembro]
+	@UsuarioID BIGINT
+AS
+BEGIN
+	
+	SELECT	MiembroID,
+			UsuarioID,
+			Nombre,
+			Apellidos,
+			FechaNacimiento,
+			Genero,
+			Telefono,
+			Email,
+			Direccion,
+			FechaRegistro,
+			MembresiaID
+	  FROM	Miembro
+	  WHERE UsuarioID = @UsuarioID
+END
+GO

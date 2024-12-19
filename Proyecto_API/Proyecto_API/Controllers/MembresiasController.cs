@@ -43,5 +43,86 @@ namespace Proyecto_API.Controllers
                 }
             }
         }
+
+        [HttpPut]
+        [Route("ActualizarSinMembresia")]
+        public IActionResult ActualizarSinMembresia(Miembro model)
+        {
+            using (var context = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
+            {
+                var respuesta = new Respuesta();
+
+                var result = context.Execute("ActualizarSinMembresia", new
+                {
+                    model.UsuarioID
+                });
+
+                if (result > 0)
+                {
+                    respuesta.Codigo = 0;
+                }
+                else
+                {
+                    respuesta.Codigo = -1;
+                    respuesta.Mensaje = "El estado del producto no se ha actualizado correctamente";
+                }
+
+                return Ok(respuesta);
+            }
+        }
+        
+        [HttpPut]
+        [Route("ActualizarMembresiaRegular")]
+        public IActionResult ActualizarMembresiaRegular(Miembro model)
+        {
+            using (var context = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
+            {
+                var respuesta = new Respuesta();
+
+                var result = context.Execute("ActualizarMembresiaRegular", new
+                {
+                    model.UsuarioID
+                });
+
+                if (result > 0)
+                {
+                    respuesta.Codigo = 0;
+                }
+                else
+                {
+                    respuesta.Codigo = -1;
+                    respuesta.Mensaje = "El estado del producto no se ha actualizado correctamente";
+                }
+
+                return Ok(respuesta);
+            }
+        }
+        
+        [HttpPut]
+        [Route("ActualizarMembresiaPremium")]
+        public IActionResult ActualizarMembresiaPremium(Miembro model)
+        {
+            using (var context = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
+            {
+                var respuesta = new Respuesta();
+
+                var result = context.Execute("ActualizarMembresiaPremium", new
+                {
+                    model.UsuarioID
+                });
+
+                if (result > 0)
+                {
+                    respuesta.Codigo = 0;
+                }
+                else
+                {
+                    respuesta.Codigo = -1;
+                    respuesta.Mensaje = "El estado del producto no se ha actualizado correctamente";
+                }
+
+                return Ok(respuesta);
+            }
+        }
     }
 }
