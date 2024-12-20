@@ -6,5 +6,6 @@ namespace Proyecto_WEB.Servicios
     {
         string Encrypt(string texto);
         List<Miembro> ConsultarMembresiaMiembro();
+        List<Carrito> ConsultarCarrito();
     }
 }

@@ -146,7 +146,7 @@ namespace Proyecto_API.Controllers
                 else
                 {
                     respuesta.Codigo = -1;
-                    respuesta.Mensaje = "No hay productos en su carrito";
+                    respuesta.Mensaje = "Este miembro no tiene membresia";
                 }
 
                 return Ok(respuesta);

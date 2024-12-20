@@ -1,0 +1,98 @@
+﻿@model List<Proyecto_WEB.Models.Carrito>
+
+<h1>Mi Carrito</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th># Producto</th>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Precio ($)</th>
+            <th>Total ($)</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductoID</td>
+                <td>@item.Nombre</td>
+                <td>@item.Unidades</td>
+                <td>$@item.Precio.ToString("N2")</td>
+                <td>$@item.Total.ToString("N2")</td>
+                <td>@item.Fecha.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
+                <td>
+                    <a id="AbrirModal" href="#" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                       data-productoID="@item.ProductoID" data-nombre="@item.Nombre">
+                        <i class="fa fa-trash" style="font-size:1.6em;"></i>
+                    </a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br><br />
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <p class="fs-5 mb-0">El monto a cancelar es de: <b>$ @decimal.Parse(Context.Session.GetString("Total")!).ToString("N2")</b></p>
+    @if (Context.Session.GetString("Total") != null && Context.Session.GetString("Total") != "0")
+    {
+        <form asp-action="PagarCarrito" asp-controller="Carrito">
+            <button type="submit" class="btn btn-outline-primary" style="width: 200px;">Pagar</button>
+        </form>
+    }
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:650px">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form asp-action="EliminarProductoCarrito" asp-controller="Carrito">
+                <div class="modal-body">
+
+                    <input type="hidden" id="ProductoID" name="ProductoID" value="">
+                    ¿Desea eliminar el producto <label id="Nombre"></label>?
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Eliminar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $("#example").DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-ES.json',
+            },
+            columnDefs: [
+                { targets: [0, 1, 2, 3, 4], type: "string" }
+            ]
+        });
+
+    });
+
+    $(document).on("click", "#AbrirModal", function () {
+
+        $("#ProductoID").val($(this).attr("data-productoID"));
+        $("#Nombre").text($(this).attr("data-nombre"));
+
+    });
+
+</script>

@@ -1,0 +1,50 @@
+﻿@model List<Proyecto_WEB.Models.Carrito>
+
+<h1>Mis Compras</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th># Factura</th>
+            <th>Nombre de Usuario</th>
+            <th>Total ($)</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.FacturaID</td>
+                <td>@item.Username</td>
+                <td>$@item.Total.ToString("N2")</td>
+                <td>@item.Fecha.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
+                <td>
+                    <a href="@Url.Action("ConsultarDetallesFactura", "Carrito", new { FacturaID = item.FacturaID})" class="btn">
+                        <i class="fa fa-eye" style="font-size:1.6em"></i>
+                    </a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $("#example").DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-ES.json',
+            },
+            columnDefs: [
+                { targets: [0, 1, 2, 3], type: "string" }
+            ]
+        });
+
+    });
+
+</script>

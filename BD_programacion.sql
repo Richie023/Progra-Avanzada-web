@@ -152,6 +152,34 @@ CREATE TABLE Producto (
     Activo BIT NOT NULL
 );
 
+CREATE TABLE Carrito (
+	CarritoID BIGINT PRIMARY KEY IDENTITY(1,1),
+	UsuarioID BIGINT NOT NULL,
+	ProductoID BIGINT NOT NULL,
+	Unidades INT NOT NULL,
+	Fecha DATETIME NOT NULL,
+	FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID),
+	FOREIGN KEY (ProductoID) REFERENCES Producto(ProductoID)
+);
+
+CREATE TABLE Factura(
+	FacturaID BIGINT PRIMARY KEY IDENTITY(1,1),
+	UsuarioID BIGINT NOT NULL,
+	Total DECIMAL(18, 2) NOT NULL,
+	Fecha DATETIME NOT NULL,
+	FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID)
+);
+
+CREATE TABLE Detalle(
+	DetalleID BIGINT PRIMARY KEY IDENTITY(1,1),
+	FacturaID BIGINT NOT NULL,
+	Nombre VARCHAR(50) NOT NULL,
+	Precio DECIMAL(18, 2) NOT NULL,
+	Cantidad INT NOT NULL,
+	Total DECIMAL(18, 2) NOT NULL,
+	FOREIGN KEY (FacturaID) REFERENCES Factura(FacturaID)
+);
+
 INSERT INTO Rol (NombreRol) VALUES ('Administrador');
 INSERT INTO Rol (NombreRol) VALUES ('Empleado');
 INSERT INTO Rol (NombreRol) VALUES ('Cliente');

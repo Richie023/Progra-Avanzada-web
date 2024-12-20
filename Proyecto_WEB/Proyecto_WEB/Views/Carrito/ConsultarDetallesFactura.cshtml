@@ -1,0 +1,43 @@
+﻿@model List<Proyecto_WEB.Models.Carrito>
+
+<h1>Factura # @Model.FirstOrDefault()!.FacturaID</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Precio ($)</th>
+            <th>Cantidad</th>
+            <th>Total ($)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nombre</td>
+                <td>$@item.Precio</td>
+                <td>@item.Unidades</td>
+                <td>$@item.Total.ToString("N2")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $("#example").DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.1.8/i18n/es-ES.json',
+            },
+            columnDefs: [
+                { targets: [0,1,2,3], type:"string" }
+            ]
+        });
+
+    });
+
+</script>

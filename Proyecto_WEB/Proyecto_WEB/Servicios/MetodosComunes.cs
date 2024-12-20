@@ -95,5 +95,25 @@ namespace Proyecto_WEB.Servicios
             }
         }
 
+        public List<Carrito> ConsultarCarrito()
+        {
+            using (var client = _http.CreateClient())
+            {
+                var usuarioId = long.Parse(_accesor.HttpContext!.Session.GetString("Consecutivo")!.ToString());
+                var url = _conf.GetSection("Variables:UrlApi").Value + $"Carrito/ConsultarCarrito/{usuarioId}";
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accesor.HttpContext.Session.GetString("Consecutivo"));
+                var response = client.GetAsync(url).Result;
+                var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;
+
+                if (result != null && result.Codigo == 0)
+                {
+                    var datosContenido = JsonSerializer.Deserialize<List<Carrito>>((JsonElement)result.Contenido!);
+                    return datosContenido!.ToList();
+                }
+
+                return new List<Carrito>();
+            }
+        }
     }
 }

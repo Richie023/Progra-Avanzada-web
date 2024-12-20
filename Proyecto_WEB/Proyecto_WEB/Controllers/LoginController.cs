@@ -58,6 +58,9 @@ namespace Proyecto_WEB.Controllers
                         var datosMembresiaMiembro = _comunes.ConsultarMembresiaMiembro();
                         HttpContext.Session.SetString("TipoMembresia", datosMembresiaMiembro.FirstOrDefault()?.TipoMembresia ?? "");
 
+                        var datosCarrito = _comunes.ConsultarCarrito();
+                        HttpContext.Session.SetString("Total", datosCarrito.Sum(x => x.Total).ToString());
+
                         return RedirectToAction("Index", "Home");
                     }
                    

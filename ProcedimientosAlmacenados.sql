@@ -366,13 +366,14 @@ BEGIN
             Stock,
             Imagen + CONVERT(VARCHAR, ProductoID) + '.png' AS Imagen,
             Activo,
-            'Activo' AS Estado -- Ya que solo mostrará productos activos, esto siempre será 'Activo'
+            'Activo' AS Estado
     FROM    Producto
-    WHERE   Activo = 1; -- Filtra solo los productos activos
+    WHERE   Activo = 1
+	AND     Stock > 0;
 END
 GO
 
-ALTER PROCEDURE [dbo].[ActualizarSinMembresia]
+CREATE PROCEDURE [dbo].[ActualizarSinMembresia]
     @UsuarioID bigint
 AS
 BEGIN
@@ -382,7 +383,7 @@ BEGIN
 END;
 GO
 
-ALTER PROCEDURE [dbo].[ActualizarMembresiaRegular]
+CREATE PROCEDURE [dbo].[ActualizarMembresiaRegular]
     @UsuarioID bigint
 AS
 BEGIN
@@ -392,7 +393,7 @@ BEGIN
 END;
 GO
 
-ALTER PROCEDURE [dbo].[ActualizarMembresiaPremium]
+CREATE PROCEDURE [dbo].[ActualizarMembresiaPremium]
     @UsuarioID bigint
 AS
 BEGIN
@@ -402,7 +403,7 @@ BEGIN
 END;
 GO
 
-ALTER PROCEDURE [dbo].[ConsultarMiembro]
+CREATE PROCEDURE [dbo].[ConsultarMiembro]
 	@UsuarioID BIGINT
 AS
 BEGIN	
@@ -422,7 +423,7 @@ BEGIN
 END
 GO
 
-ALTER PROCEDURE [dbo].[ConsultarMembresiaMiembro]
+CREATE PROCEDURE [dbo].[ConsultarMembresiaMiembro]
 	@UsuarioID BIGINT
 AS
 BEGIN
@@ -448,3 +449,129 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [dbo].[RegistrarCarrito]
+	@UsuarioID bigint,
+	@ProductoID bigint,
+	@Unidades int
+AS
+BEGIN
+	
+	IF(	SELECT COUNT(*) FROM Carrito
+		WHERE	UsuarioID = @UsuarioID
+			AND ProductoID = @ProductoID) = 0
+	BEGIN
+
+		INSERT INTO Carrito (UsuarioID,ProductoID,Unidades,Fecha)
+		VALUES (@UsuarioID, @ProductoID, @Unidades, GETDATE())
+
+	END
+	ELSE
+	BEGIN
+
+		UPDATE	Carrito
+		SET		Unidades = @Unidades,
+				Fecha = GETDATE()
+		WHERE	UsuarioID = @UsuarioID
+			AND ProductoID = @ProductoID
+
+	END
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarCarrito]
+	@UsuarioID BIGINT
+AS
+BEGIN
+	
+	SELECT	C.CarritoID,
+			C.ProductoID,
+			P.Nombre,
+			C.Unidades,
+			P.Precio,
+			C.Unidades * P.Precio 'Total',
+			C.Fecha
+	  FROM	Carrito C
+	  INNER JOIN Producto P ON C.ProductoID = P.ProductoID
+	  WHERE UsuarioID = @UsuarioID
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[RemoverProductoCarrito]
+	@UsuarioID BIGINT,
+	@ProductoID BIGINT
+AS
+BEGIN
+	
+	DELETE	FROM Carrito
+	WHERE	UsuarioID = @UsuarioID
+		AND	ProductoID  = @ProductoID
+END
+GO
+
+CREATE PROCEDURE [dbo].[PagarCarrito]
+	@UsuarioID BIGINT
+AS
+BEGIN
+	
+	--1
+	INSERT INTO Factura (UsuarioID,Total,Fecha)
+    SELECT	C.UsuarioID, SUM(C.Unidades * P.Precio), GETDATE()
+	FROM	Carrito C
+	INNER JOIN Producto P ON C.ProductoID= P.ProductoID
+	WHERE  C.UsuarioID = @UsuarioID
+	GROUP BY C.UsuarioID
+
+	--2
+	INSERT INTO Detalle (FacturaID,Nombre,Precio,Cantidad,Total)
+	SELECT	SCOPE_IDENTITY(), P.Nombre, P.Precio, C.Unidades, (C.Unidades * P.Precio)
+	FROM	Carrito C
+	INNER JOIN Producto P ON C.ProductoID = P.ProductoID
+	WHERE  C.UsuarioID = @UsuarioID
+
+	--3
+	UPDATE P
+	SET Stock = Stock - C.Unidades
+	FROM Producto P
+	INNER JOIN Carrito C ON P.ProductoID = C.ProductoID 
+	WHERE  C.UsuarioID = @UsuarioID
+
+	--4
+	DELETE FROM Carrito 
+	WHERE  UsuarioID = @UsuarioID 
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarFacturas]
+	@UsuarioID BIGINT
+AS
+BEGIN
+	
+	SELECT	F.FacturaID,
+			U.Username,
+			F.Total,
+			F.Fecha
+	FROM	Factura F
+	INNER JOIN Usuario U ON F.UsuarioID = U.UsuarioID
+	WHERE	F.UsuarioID = @UsuarioID
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarDetallesFactura]
+	@FacturaID BIGINT
+AS
+BEGIN
+	
+	SELECT	D.FacturaID,
+			D.Nombre,
+			D.Precio,
+			D.Cantidad 'Unidades',
+			D.Total
+	FROM	Detalle D
+	WHERE	D.FacturaID = @FacturaID
+
+END
+GO

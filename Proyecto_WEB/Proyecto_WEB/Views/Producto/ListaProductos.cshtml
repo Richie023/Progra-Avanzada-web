@@ -1,23 +1,94 @@
 ﻿@model List<Proyecto_WEB.Models.Producto>
 
-<h1>Productos</h1>
-
-<h2>@ViewData["Title"]</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Productos</h1>
+    @if (Context.Session.GetString("Rol") != null)
+    {
+        <a href="@Url.Action("ConsultarCarrito", "Carrito")" class="btn btn-outline-primary btn-lg d-flex align-items-center gap-2">
+            <i class="fa fa-shopping-cart"></i>
+            <span>Ver Carrito</span>
+        </a>
+    }
+</div>
 
 <div class="row">
     @foreach (var item in Model)
     {
         <div class="col-md-4 mb-4">
-            <div class="card h-80">                
-                <img src="@item.Imagen" class="card-img-top">
+            <div class="card h-80">
+                <div class="text-center">
+                    <img src="@item.Imagen" class="card-img-top" style="width:200px; height:175px; border-radius:2px; margin-top:20px">
+                </div>
                 <div class="card-body">
                     <h5 class="card-title">@item.Nombre</h5>
                     <p class="card-text">
                         Precio: $@item.Precio <br />
                         Unidades Disponibles: @item.Stock <br />
                     </p>
+
+                    @if (Context.Session.GetString("Rol") != null)
+                    {
+                        <div class="row">
+                            <div class="col-4">
+                                <input id=@item.ProductoID type="number" class="form-control text-center" value="1" min="1" max=@item.Stock onkeypress="return false;">
+                            </div>
+                            <div class="col-8">
+                                <a onclick="ActualizarCarrito(@item.ProductoID);" class="btn btn-primary" style="width:100%">Agregar al Carrito</a>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     }
 </div>
+
+<script>
+    function ActualizarCarrito(ProductoID) {
+        let cantidad = $("#" + ProductoID).val();
+
+        $.ajax({
+            url: "/Carrito/AgregarCarrito",
+            method: "POST",
+            dataType: "json",
+            data: {
+                "ProductoID": ProductoID,
+                "Cantidad": cantidad
+            },
+            success: function (data) {
+
+                if (data == 0) {
+                    MostrarMensajeOK("El producto se agregó correctamente en su carrito");
+                }
+                else {
+                    MostrarMensaje("El producto no se agregó correctamente en su carrito");
+                }
+
+            }
+        });
+    }
+
+    function MostrarMensajeOK(texto) {
+        Swal.fire({
+            title: "Éxito",
+            confirmButtonText: "Aceptar",
+            text: texto,
+            icon: "success"
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+                window.location.href = "/Producto/ListaProductos";
+            }
+
+        });
+    }
+
+    function MostrarMensaje(texto) {
+        Swal.fire({
+            title: "Error",
+            text: texto,
+            icon: "error"
+        });
+    }
+
+</script>
