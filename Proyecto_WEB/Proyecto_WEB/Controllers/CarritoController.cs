@@ -151,5 +151,26 @@ namespace SWeb.Controllers
                 return View(new List<Carrito>());
             }
         }
+
+        [HttpGet]
+        public IActionResult ConsultarFacturasAdmin()
+        {
+            using (var client = _http.CreateClient())
+            {
+                var url = _conf.GetSection("Variables:UrlApi").Value + $"Carrito/ConsultarFacturasAdmin";
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", HttpContext.Session.GetString("Consecutivo"));
+                var response = client.GetAsync(url).Result;
+                var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;
+
+                if (result != null && result.Codigo == 0)
+                {
+                    var datosContenido = JsonSerializer.Deserialize<List<Carrito>>((JsonElement)result.Contenido!);
+                    return View(datosContenido!.ToList());
+                }
+
+                return View(new List<Carrito>());
+            }
+        }
     }
 }

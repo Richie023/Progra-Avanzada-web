@@ -575,3 +575,17 @@ BEGIN
 
 END
 GO
+
+CREATE PROCEDURE [dbo].[ConsultarFacturasAdmin]
+AS
+BEGIN
+	
+	SELECT	F.FacturaID,
+			U.Username,
+			F.Total,
+			F.Fecha
+	FROM	Factura F
+	INNER JOIN Usuario U ON F.UsuarioID = U.UsuarioID
+
+END
+GO

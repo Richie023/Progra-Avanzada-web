@@ -168,5 +168,32 @@ namespace SApi.Controllers
                 return Ok(respuesta);
             }
         }
+
+        [HttpGet]
+        [Route("ConsultarFacturasAdmin")]
+        public IActionResult ConsultarFacturasAdmin()
+        {
+            using (var context = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
+            {
+                var respuesta = new Respuesta();
+                var result = context.Query<Carrito>(
+                    "ConsultarFacturasAdmin",
+                    commandType: CommandType.StoredProcedure
+                    );
+
+                if (result.Any())
+                {
+                    respuesta.Codigo = 0;
+                    respuesta.Contenido = result;
+                }
+                else
+                {
+                    respuesta.Codigo = -1;
+                    respuesta.Mensaje = "No hay facturas registradas en este momento";
+                }
+
+                return Ok(respuesta);
+            }
+        }
     }
 }
