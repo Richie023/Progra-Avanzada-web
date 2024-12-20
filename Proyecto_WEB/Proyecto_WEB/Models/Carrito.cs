@@ -9,8 +9,8 @@
 
         public long FacturaID { get; set; }
         public string Nombre { get; set; } = string.Empty;
+        public string Apellidos { get; set; } = string.Empty;
         public decimal Precio { get; set; }
         public decimal Total { get; set; }
-        public string Username { get; set; } = string.Empty;
     }
 }

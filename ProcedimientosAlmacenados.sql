@@ -516,12 +516,13 @@ AS
 BEGIN
 	
 	--1
-	INSERT INTO Factura (UsuarioID,Total,Fecha)
-    SELECT	C.UsuarioID, SUM(C.Unidades * P.Precio), GETDATE()
-	FROM	Carrito C
-	INNER JOIN Producto P ON C.ProductoID= P.ProductoID
-	WHERE  C.UsuarioID = @UsuarioID
-	GROUP BY C.UsuarioID
+	INSERT INTO Factura (UsuarioID, MiembroID, Total, Fecha)
+	SELECT  C.UsuarioID, M.MiembroID, SUM(C.Unidades * P.Precio), GETDATE()
+	FROM    Carrito C
+	INNER JOIN Producto P ON C.ProductoID = P.ProductoID
+	INNER JOIN Miembro M ON M.UsuarioID = C.UsuarioID
+	WHERE   C.UsuarioID = @UsuarioID
+	GROUP BY C.UsuarioID, M.MiembroID;
 
 	--2
 	INSERT INTO Detalle (FacturaID,Nombre,Precio,Cantidad,Total)
@@ -550,11 +551,13 @@ AS
 BEGIN
 	
 	SELECT	F.FacturaID,
-			U.Username,
+			M.Nombre,
+			M.Apellidos,
 			F.Total,
 			F.Fecha
 	FROM	Factura F
 	INNER JOIN Usuario U ON F.UsuarioID = U.UsuarioID
+	INNER JOIN Miembro M ON F.MiembroID = M.MiembroID
 	WHERE	F.UsuarioID = @UsuarioID
 
 END
@@ -581,11 +584,12 @@ AS
 BEGIN
 	
 	SELECT	F.FacturaID,
-			U.Username,
+			M.Nombre,
+			M.Apellidos,
 			F.Total,
 			F.Fecha
 	FROM	Factura F
-	INNER JOIN Usuario U ON F.UsuarioID = U.UsuarioID
+	INNER JOIN Miembro M ON F.MiembroID = M.MiembroID
 
 END
 GO
