@@ -190,7 +190,7 @@ GO
 
 INSERT INTO Membresia (TipoMembresia, Precio, Duracion, Beneficios) 
 VALUES 
-('Sin membresia', 0.00, 'N/A', 'Acceso limitado a servicios básicos'),
+('Sin Membresia', 0.00, 'N/A', 'Acceso limitado a servicios básicos'),
 ('Regular', 50.00, '1 mes', 'Acceso a gimnasio, clases grupales estándar'),
 ('Premium', 100.00, '1 mes', 'Acceso a todas las áreas, clases premium, sesiones con entrenador personal');
 GO
@@ -202,6 +202,6 @@ INSERT INTO Clases
       ,Horario
       ,EmpleadoID)
 VALUES 
-      ('Yoga', 'Clase de yoga para todos los niveles', 60, GETDATE(), 2);
+      ('Yoga', 'Clase de yoga para todos los niveles', 60, GETDATE(), 1);
 GO
 --Cambiar ID a 1

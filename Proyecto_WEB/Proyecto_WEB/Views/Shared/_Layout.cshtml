@@ -40,9 +40,6 @@
                             <a href="@Url.Action("ListaProductos", "Producto")" class="nav-link"><i class="typcn typcn-tags"></i></i> Productos</a>
                         </li>
                         <li class="nav-item">
-                            <a href="@Url.Action("Index", "Clase")" class="nav-link"><i class="typcn typcn-device-desktop"></i> Clases</a>
-                        </li>
-                        <li class="nav-item">
                             <a href="@Url.Action("ListaProgreso", "Progreso")" class="nav-link"><i class="typcn typcn-chart-bar-outline"></i> Tu Progreso</a>
                         </li>
                         <li class="nav-item">
@@ -74,12 +71,28 @@
                                 @if (Context.Session.GetString("NombreUsuario") != null)
                                 {
                                     <h6>@Context.Session.GetString("NombreUsuario")</h6>
-                                    <span>Membresia @Context.Session.GetString("TipoMembresia")</span>
+
+                                    @if (Context.Session.GetString("Rol") == "Cliente")
+                                    {
+                                        @if (Context.Session.GetString("TipoMembresia") == "Sin Membresia")
+                                        {
+                                            <span>@Context.Session.GetString("TipoMembresia")</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Membresia @Context.Session.GetString("TipoMembresia")</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span>Membresia Premium</span>
+                                    }
+
+                                    
                                 }
                                 else
                                 {
-                                    <h6>Usuario</h6>
-                                    <span>Sin Membresia</span>
+                                    <h6>Invitado</h6>
                                 }
 
                             </div>

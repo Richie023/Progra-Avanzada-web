@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Proyecto_WEB.Models;
+using Proyecto_WEB.Servicios;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Proyecto_WEB.Servicios;
 
 namespace Proyecto_WEB.Controllers
 {
@@ -9,11 +11,12 @@ namespace Proyecto_WEB.Controllers
     {
         private readonly IHttpClientFactory _http;
         private readonly IConfiguration _conf;
-
-        public MembresiasController(IHttpClientFactory http, IConfiguration conf)
+        private readonly IMetodosComunes _comunes;
+        public MembresiasController(IHttpClientFactory http, IConfiguration conf, IMetodosComunes comunes)
         {
             _http = http;
             _conf = conf;
+            _comunes = comunes;
         }
 
         [HttpGet]
@@ -122,6 +125,9 @@ namespace Proyecto_WEB.Controllers
 
                 if (result != null && result.Codigo == 0)
                 {
+                    var datosMembresiaMiembro = _comunes.ConsultarMembresiaMiembro();
+                    HttpContext.Session.SetString("TipoMembresia", datosMembresiaMiembro.FirstOrDefault()?.TipoMembresia ?? "");
+
                     return RedirectToAction("Index", "Membresias");
                 }
                 else
@@ -197,6 +203,9 @@ namespace Proyecto_WEB.Controllers
 
                 if (result != null && result.Codigo == 0)
                 {
+                    var datosMembresiaMiembro = _comunes.ConsultarMembresiaMiembro();
+                    HttpContext.Session.SetString("TipoMembresia", datosMembresiaMiembro.FirstOrDefault()?.TipoMembresia ?? "");
+
                     return RedirectToAction("Index", "Membresias");
                 }
                 else
@@ -272,6 +281,9 @@ namespace Proyecto_WEB.Controllers
 
                 if (result != null && result.Codigo == 0)
                 {
+                    var datosMembresiaMiembro = _comunes.ConsultarMembresiaMiembro();
+                    HttpContext.Session.SetString("TipoMembresia", datosMembresiaMiembro.FirstOrDefault()?.TipoMembresia ?? "");
+
                     return RedirectToAction("Index", "Membresias");
                 }
                 else

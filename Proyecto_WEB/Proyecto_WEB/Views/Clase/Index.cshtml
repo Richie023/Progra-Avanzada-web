@@ -16,13 +16,13 @@
     {
         <div class="col-md-4 mb-4">
             <div class="card h-80">
-                    <img src="/images/sinMembresia.jpg" class="card-img-top" alt="Sin Membresia">
+                    <img src="/images/clases.jpg" class="card-img-top" alt="Clases">
                 <div class="card-body">
                     <h4 class="card-title">@clase.Nombre</h4>
-                    <h5>@clase.Entrenador</h5>
+                    <h5>Entrenador Encargado: @clase.Entrenador</h5>
                     <p class="card-text">
-                        Duración(Minutos): $@clase.Duracion <br />
-                        Horario: @clase.Horario <br />
+                        Duración: @clase.Duracion min<br />
+                        Horario: @clase.Horario<br />
                         Descripción: @clase.Descripcion
                     </p>
                     <a href="@Url.Action("RegistrarClase", "Clase")" class="btn btn-primary">Registrarme</a>
