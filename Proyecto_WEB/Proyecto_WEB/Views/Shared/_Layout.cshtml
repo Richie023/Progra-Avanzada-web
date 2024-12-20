@@ -74,12 +74,12 @@
                                 @if (Context.Session.GetString("NombreUsuario") != null)
                                 {
                                     <h6>@Context.Session.GetString("NombreUsuario")</h6>
-                                    <span>Premium Member</span>
+                                    <span>Membresia @Context.Session.GetString("TipoMembresia")</span>
                                 }
                                 else
                                 {
                                     <h6>Usuario</h6>
-                                    <span>Premium Member</span>
+                                    <span>Sin Membresia</span>
                                 }
 
                             </div>

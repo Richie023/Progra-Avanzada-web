@@ -405,8 +405,7 @@ GO
 ALTER PROCEDURE [dbo].[ConsultarMiembro]
 	@UsuarioID BIGINT
 AS
-BEGIN
-	
+BEGIN	
 	SELECT	MiembroID,
 			UsuarioID,
 			Nombre,
@@ -422,3 +421,30 @@ BEGIN
 	  WHERE UsuarioID = @UsuarioID
 END
 GO
+
+ALTER PROCEDURE [dbo].[ConsultarMembresiaMiembro]
+	@UsuarioID BIGINT
+AS
+BEGIN
+	SELECT  M.MiembroID,
+                M.UsuarioID,
+                M.Nombre,
+                M.Apellidos,
+                M.FechaNacimiento,
+                M.Genero,
+                M.Telefono,
+                M.Email,
+                M.Direccion,
+                M.FechaRegistro,
+                M.MembresiaID,
+                M.Nombre + ' ' + M.Apellidos AS NombreCompleto,
+                E.TipoMembresia,
+                E.Precio,
+                E.Duracion,
+                E.Beneficios
+          FROM  Miembro M
+          LEFT JOIN Membresia E ON M.MembresiaID = E.MembresiaID
+          WHERE UsuarioID = @UsuarioID
+END
+GO
+

@@ -4,6 +4,7 @@ using static System.Net.WebRequestMethods;
 using System.Text.Json;
 using System.Security.Cryptography;
 using System.Text;
+using Proyecto_WEB.Servicios;
 
 namespace Proyecto_WEB.Controllers
 {
@@ -11,12 +12,12 @@ namespace Proyecto_WEB.Controllers
     {
         private readonly IHttpClientFactory _http;
         private readonly IConfiguration _conf;
-    
-        public LoginController(IHttpClientFactory http, IConfiguration conf)
+        private readonly IMetodosComunes _comunes;
+        public LoginController(IHttpClientFactory http, IConfiguration conf, IMetodosComunes comunes)
         {
             _http = http;
             _conf = conf;
-  
+            _comunes = comunes;
         }
 
         [HttpGet]
@@ -52,6 +53,11 @@ namespace Proyecto_WEB.Controllers
                         HttpContext.Session.SetString("Consecutivo", datosUsuario!.UsuarioID.ToString());
                         HttpContext.Session.SetString("NombreUsuario", datosUsuario!.Username);
                         HttpContext.Session.SetString("Rol", datosUsuario!.NombreRol);
+
+
+                        var datosMembresiaMiembro = _comunes.ConsultarMembresiaMiembro();
+                        HttpContext.Session.SetString("TipoMembresia", datosMembresiaMiembro.FirstOrDefault()?.TipoMembresia ?? "");
+
                         return RedirectToAction("Index", "Home");
                     }
                    

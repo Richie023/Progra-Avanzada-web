@@ -13,5 +13,11 @@
         public string Direccion { get; set; } = string.Empty;
         public DateTime FechaRegistro { get; set; }
         public int MembresiaID { get; set; }
+
+        public string NombreCompleto { get; set; } = string.Empty;
+        public string TipoMembresia { get; set; } = string.Empty;
+        public decimal Precio { get; set; }
+        public string Duracion { get; set; } = string.Empty;
+        public string Beneficios { get; set; } = string.Empty;
     }
 }
