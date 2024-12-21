@@ -1,12 +1,16 @@
 ﻿@model List<Proyecto_WEB.Models.Carrito>
 
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
 <h1>Lista de Facturas</h1>
 
 <table class="table">
     <thead>
         <tr>
             <th># Factura</th>
-            <th>Nombre de Usuario</th>
+            <th>Nombre</th>
             <th>Total ($)</th>
             <th>Fecha</th>
             <th>Acciones</th>
@@ -17,7 +21,7 @@
         {
             <tr>
                 <td>@item.FacturaID</td>
-                <td>@item.Username</td>
+                <td>@item.Nombre @item.Apellidos</td>
                 <td>$@item.Total.ToString("N2")</td>
                 <td>@item.Fecha.ToString("dd/MM/yyyy hh:mm:ss tt")</td>
                 <td>

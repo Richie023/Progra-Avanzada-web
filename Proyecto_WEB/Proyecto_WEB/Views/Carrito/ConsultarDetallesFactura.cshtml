@@ -1,5 +1,14 @@
 ﻿@model List<Proyecto_WEB.Models.Carrito>
 
+@if (Context.Session.GetString("Rol") == "Administrador")
+{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 <h1>Factura # @Model.FirstOrDefault()!.FacturaID</h1>
 
 <table class="table">
