@@ -3,7 +3,6 @@ using Proyecto_WEB.Models;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
-using static System.Net.WebRequestMethods;
 using System.Text.Json;
 
 namespace Proyecto_WEB.Servicios
@@ -13,11 +12,38 @@ namespace Proyecto_WEB.Servicios
         private readonly IConfiguration _conf;
         private readonly IHttpClientFactory _http;
         private readonly IHttpContextAccessor _accesor;
+
         public MetodosComunes(IConfiguration conf, IHttpClientFactory http, IHttpContextAccessor accesor)
         {
             _conf = conf;
             _http = http;
             _accesor = accesor;
+        }
+
+        public async Task<HttpResponseMessage> Post(string url, object data)
+        {
+            using (var client = _http.CreateClient())
+            {
+                client.BaseAddress = new Uri(_conf.GetSection("Variables:UrlApi").Value);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accesor.HttpContext.Session.GetString("Token"));
+
+                var jsonContent = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
+                return await client.PostAsync(url, jsonContent);
+            }
+        }
+
+        public async Task<T> Get<T>(string url)
+        {
+            using (var client = _http.CreateClient())
+            {
+                client.BaseAddress = new Uri(_conf.GetSection("Variables:UrlApi").Value);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _accesor.HttpContext.Session.GetString("Token"));
+
+                var response = await client.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<T>(responseContent);
+            }
         }
 
         public string Encrypt(string texto)
@@ -48,7 +74,6 @@ namespace Proyecto_WEB.Servicios
 
             return Convert.ToBase64String(array);
         }
-
 
         public string Decrypt(string texto)
         {

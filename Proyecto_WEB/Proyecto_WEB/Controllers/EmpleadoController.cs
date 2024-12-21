@@ -1,93 +1,40 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Proyecto_WEB.Models;
-using System.Net.Http;
-using System.Net.Http.Json;
+using Proyecto_WEB.Servicios;
 
 namespace Proyecto_WEB.Controllers
 {
     public class EmpleadoController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IMetodosComunes _metodosComunes;
 
-        public EmpleadoController(IHttpClientFactory httpClientFactory)
+        public EmpleadoController(IMetodosComunes metodosComunes)
         {
-            _httpClientFactory = httpClientFactory;
+            _metodosComunes = metodosComunes;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> RegEmpleados()
+        public IActionResult RegEmpleados()
         {
-            using (var client = _httpClientFactory.CreateClient())
-            {
-                client.BaseAddress = new Uri("https://localhost:5001/api/");
-
-                var rolesResponse = await client.GetAsync("Usuario/ListarRoles");
-
-                if (rolesResponse.IsSuccessStatusCode)
-                {
-                    var roles = await rolesResponse.Content.ReadFromJsonAsync<IEnumerable<Rol>>();
-                    ViewBag.Roles = roles; 
-                }
-                else
-                {
-                    ViewBag.Roles = new List<Rol>();
-                    ModelState.AddModelError("", "No se pudieron cargar los roles.");
-                }
-            }
-
-            return View("~/Views/Empleado/RegEmpleados.cshtml");
+            
+            return View();
         }
-
-
 
         [HttpPost]
-        public async Task<IActionResult> RegEmpleados(Empleado model, Usuario usuarioModel)
+        public async Task<IActionResult> Registrar(Empleado empleado)
         {
-            if (ModelState.IsValid)
+            var response = await _metodosComunes.Post("Empleado/Registrar", empleado);
+            if (response.IsSuccessStatusCode)
             {
-                using (var client = _httpClientFactory.CreateClient())
-                {
-                    client.BaseAddress = new Uri("https://localhost:5001/api/");
-
-                    var usuarioResponse = await client.PostAsJsonAsync("Usuario/Registrar", usuarioModel);
-                    if (!usuarioResponse.IsSuccessStatusCode)
-                    {
-                        ModelState.AddModelError("", "No se pudo registrar el usuario.");
-                        return View("~/Views/Empleado/RegEmpleados.cshtml");
-                    }
-
-                    var usuarioID = await usuarioResponse.Content.ReadFromJsonAsync<long>();
-                    model.UsuarioID = usuarioID;
-
-                    var empleadoResponse = await client.PostAsJsonAsync("Empleado/Registrar", model);
-                    if (empleadoResponse.IsSuccessStatusCode)
-                    {
-                        return RedirectToAction("ListEmpleados");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "No se pudo registrar el empleado.");
-                    }
-                }
+                return RedirectToAction("ListEmpleado");
             }
-
-            using (var client = _httpClientFactory.CreateClient())
-            {
-                client.BaseAddress = new Uri("https://localhost:5001/api/");
-                var cargosResponse = await client.GetAsync("Cargo/Listar");
-                var rolesResponse = await client.GetAsync("Usuario/ListarRoles");
-
-                if (cargosResponse.IsSuccessStatusCode && rolesResponse.IsSuccessStatusCode)
-                {
-                    var cargos = await cargosResponse.Content.ReadFromJsonAsync<IEnumerable<Cargo>>();
-                    var roles = await rolesResponse.Content.ReadFromJsonAsync<IEnumerable<Rol>>();
-
-                    ViewBag.Cargos = cargos ?? new List<Cargo>();
-                    ViewBag.Roles = roles ?? new List<Rol>();
-                }
-            }
-
-            return View("~/Views/Empleado/RegEmpleados.cshtml", model);
+            return View("RegEmpleados");
         }
+
+        public async Task<IActionResult> ListEmpleados()
+        {
+            var empleados = await _metodosComunes.Get<List<Empleado>>("Empleado/Listar");
+            return View(empleados);
+        }
+
     }
 }

@@ -1,45 +1,27 @@
-﻿@* @model IEnumerable<Proyecto_WEB.Models.Empleado>
-@{
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-}
-<h1>Lista de Empleados</h1>
+﻿@model List<Proyecto_WEB.Models.Empleado>
 
-@if (!Model.Any())
-{
-    <p>No hay empleados registrados.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>Fecha Nacimiento</th>
-                <th>Teléfono</th>
-                <th>Email</th>
-                <th>Dirección</th>
-                <th>Fecha Contratación</th>
-                <th>Cargo ID</th>
-                <th>Usuario ID</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var empleado in Model)
-            {
-                <tr>
-                    <td>@empleado.Nombre</td>
-                    <td>@empleado.Apellidos</td>
-                    <td>@empleado.FechaNacimiento.ToShortDateString() ?? "N/A"</td>
-                    <td>@empleado.Telefono</td>
-                    <td>@empleado.Email</td>
-                    <td>@empleado.Direccion</td>
-                    <td>@empleado.FechaContratacion.ToShortDateString() ?? "N/A"</td>
-                    <td>@empleado.CargoID</td>
-                    <td>@empleado.UsuarioID</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
- *@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Empleados</h1>
+</div>
+
+<div class="row">
+    @foreach (var empleado in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">@empleado.Nombre @empleado.Apellidos</h5>
+                    <p class="card-text">
+                        Usuario Asociado: @empleado.UsuarioID <br />
+                        Fecha de Nacimiento: @empleado.FechaNacimiento.ToShortDateString() <br />
+                        Teléfono: @empleado.Telefono <br />
+                        Email: @empleado.Email <br />
+                        Dirección: @empleado.Direccion <br />
+                        Fecha de Contratación: @empleado.FechaContratacion.ToShortDateString() <br />
+                        Cargo: @empleado.NombreCargo <br />
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

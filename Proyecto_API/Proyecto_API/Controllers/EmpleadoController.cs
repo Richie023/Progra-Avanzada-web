@@ -21,27 +21,22 @@ namespace Proyecto_API.Controllers
         {
             using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
             {
-                var result = connection.Execute("RegistrarEmpleado", new
-                {
-                    model.Nombre,
-                    model.Apellidos,
-                    model.FechaNacimiento,
-                    model.Telefono,
-                    model.Email,
-                    model.Direccion,
-                    model.FechaContratacion,
-                    model.CargoID,
-                    model.UsuarioID
-                }, commandType: System.Data.CommandType.StoredProcedure);
+                connection.Execute(
+                    "EXEC RegistrarEmpleado @Nombre, @Apellidos, @FechaNacimiento, @Telefono, @Email, @Direccion, @FechaContratacion, @CargoID, @UsuarioID",
+                    new
+                    {
+                        model.Nombre,
+                        model.Apellidos,
+                        model.FechaNacimiento,
+                        model.Telefono,
+                        model.Email,
+                        model.Direccion,
+                        model.FechaContratacion,
+                        model.CargoID,
+                        model.UsuarioID
+                    });
 
-                if (result > 0)
-                {
-                    return Ok(new { Message = "Empleado registrado correctamente" });
-                }
-                else
-                {
-                    return BadRequest(new { Message = "No se pudo registrar el empleado" });
-                }
+                return Ok(new { Message = "Empleado registrado exitosamente." });
             }
         }
 
@@ -50,10 +45,10 @@ namespace Proyecto_API.Controllers
         {
             using (var connection = new SqlConnection(_conf.GetConnectionString("DefaultConnection")))
             {
-                var empleados = connection.Query<Empleado>("SELECT * FROM Empleado");
+                var empleados = connection.Query<Empleado>(
+                    "SELECT e.*, c.NombreCargo FROM Empleado e LEFT JOIN Cargo c ON e.CargoID = c.CargoID");
                 return Ok(empleados);
             }
         }
-
     }
 }

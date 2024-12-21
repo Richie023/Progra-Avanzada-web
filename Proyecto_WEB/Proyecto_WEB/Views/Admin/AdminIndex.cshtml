@@ -1,11 +1,18 @@
 ﻿@{
-    ViewData["Title"] = "Admin page";
+    ViewData["Title"] = "Admin Page";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="container d-flex justify-content-center align-items-center full-height">
-    <div class="text-center">
-        <h1>Bienvenido @Context.Session.GetString("NombreUsuario")</h1>
-        <h3>Pagina de administrador</h3>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Bienvenido, @Context.Session.GetString("NombreUsuario")</h1>
+    <h3 class="text-center">Página de Administrador</h3>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <a href="/Empleado/RegEmpleados" class="btn btn-primary w-100">Registrar Empleado</a>
+        </div>
+        <div class="col-md-6">
+            <a href="/Empleado/ListEmpleados" class="btn btn-secondary w-100">Listar Empleados</a>
+        </div>
     </div>
 </div>
