@@ -74,7 +74,7 @@ CREATE TABLE Miembro (
 	FechaRegistro Date NOT NULL,
 	MembresiaID INT NOT NULL ,
 	FOREIGN KEY (UsuarioID) REFERENCES Usuario(UsuarioID),
-	FOREIGN KEY (MembresiaID) References Membresia (MembresiaID),
+	FOREIGN KEY (MembresiaID) References Membresia (MembresiaID)
 );
 
 CREATE TABLE MiembroClase (
@@ -244,4 +244,3 @@ INSERT INTO Clases
 VALUES 
       ('Clase2', 'Clase de ejemplo', 60, GETDATE(), 1);
 GO
---Cambiar ID a 1
