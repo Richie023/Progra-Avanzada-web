@@ -16,39 +16,7 @@ namespace Proyecto_WEB.Controllers
             _conf = conf;
 
         }
-        [HttpPost]
-        public IActionResult RegistrarMiembroEnClase(Clase claseId)
-        {
-            using (var client = _http.CreateClient())
-            {
-                var url = _conf.GetSection("Variables:UrlApi").Value + "RegistrarMiembroEnClase";
-
-                var UsuarioID = long.Parse(HttpContext.Session.GetString("Consecutivo")!.ToString());
-
-                var miembroClase = new MiembroClase
-                {
-                    ClaseID = claseId.ClaseID,
-                    UsuarioID = UsuarioID
-                };
-
-                JsonContent datos = JsonContent.Create(miembroClase);
-
-     
-
-                var response = client.PostAsync(url, datos).Result;
-                var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;
-
-                if (result != null && result.Codigo == 0)
-                {
-                    return RedirectToAction("Index", "Clase");
-                }
-                else
-                {
-                    ViewBag.Mensaje = result!.Mensaje;
-                    return View("Error");
-                }
-            }
-        }
+    
 
         [HttpGet]
         public IActionResult Index()
@@ -69,6 +37,41 @@ namespace Proyecto_WEB.Controllers
                 return View(new List<Clase>());
             }
         }
+        [HttpPost]
+        public IActionResult Index(int claseId) 
+        {
+            if (HttpContext.Session.GetString("Consecutivo") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            using (var client = _http.CreateClient())
+            {
+                var url = _conf.GetSection("Variables:UrlApi").Value + "Clase/RegistrarMiembroEnClase";
+                var UsuarioID = long.Parse(HttpContext.Session.GetString("Consecutivo")!.ToString());
+
+                var miembroClase = new MiembroClase
+                {
+                    ClaseID = claseId, 
+                    UsuarioID = UsuarioID
+                };
+
+                JsonContent datos = JsonContent.Create(miembroClase);
+                var response = client.PostAsync(url, datos).Result;
+                var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;
+
+                if (result != null && result.Codigo == 0)
+                {
+                    return RedirectToAction("Index", "Clase");
+                }
+                else
+                {
+                    ViewBag.Error = result!.Mensaje;
+                    return View("Index", "Clase");
+                }
+            }
+        }
+
         [HttpGet]
         public IActionResult ClasesUsuario()
         {
