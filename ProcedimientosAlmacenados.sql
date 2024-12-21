@@ -152,12 +152,29 @@ BEGIN
 END
 GO
 CREATE PROCEDURE [dbo].[RegistrarMiembroEnClase]
-	@ClaseID int,
-	@MiembroID bigint
+    @ClaseID int,
+    @MiembroID bigint
 AS
 BEGIN
-	INSERT INTO MiembroClase (ClaseID,MiembroID)
-	VALUES (@ClaseID , @MiembroID)
+    IF EXISTS (SELECT 1 FROM MiembroClase WHERE ClaseID = @ClaseID AND MiembroID = @MiembroID)
+    BEGIN
+        DELETE FROM MiembroClase WHERE ClaseID = @ClaseID AND MiembroID = @MiembroID
+    END
+    
+    INSERT INTO MiembroClase (ClaseID, MiembroID)
+    VALUES (@ClaseID, @MiembroID)
+END
+GO
+
+CREATE PROCEDURE [dbo].[EliminarReservaClase]
+    @ClaseID int,
+    @MiembroID bigint
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM MiembroClase WHERE ClaseID = @ClaseID AND MiembroID = @MiembroID)
+    BEGIN
+        DELETE FROM MiembroClase WHERE ClaseID = @ClaseID AND MiembroID = @MiembroID
+    END
 END
 GO
 
@@ -602,3 +619,4 @@ BEGIN
 
 END
 GO
+
