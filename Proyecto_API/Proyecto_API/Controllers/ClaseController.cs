@@ -90,6 +90,54 @@ namespace Proyecto_API.Controllers
                 return Ok(respuesta);
             }
         }
+        [HttpPost]
+        [Route("EliminarReservaClase")]
+        public IActionResult EliminarReservaClase(MiembroClase miembroClase)
+        {
+            using (var connection = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
+            {
+                var respuesta = new Respuesta();
+
+                try
+                {
+                    connection.Open();
+
+                    var miembro = connection.QueryFirstOrDefault<Miembro>("ConsultarMiembro", new { UsuarioID = miembroClase.UsuarioID });
+
+                    if (miembro != null)
+                    {
+                        var result = connection.Execute("EliminarReservaClase", new { ClaseID = miembroClase.ClaseID, MiembroID = miembro.MiembroID });
+
+                        if (result > 0)
+                        {
+                            respuesta.Codigo = 0;
+                            respuesta.Mensaje = "Reserva eliminada exitosamente.";
+                        }
+                        else
+                        {
+                            respuesta.Codigo = -1;
+                            respuesta.Mensaje = "Error al eliminar la reserva de la clase.";
+                        }
+                    }
+                    else
+                    {
+                        respuesta.Codigo = -1;
+                        respuesta.Mensaje = "Miembro no encontrado.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    respuesta.Codigo = -1;
+                    respuesta.Mensaje = $"Ocurrió un error: {ex.Message}";
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+                return Ok(respuesta);
+            }
+        }
 
         [HttpGet]
         [Route("ConsultarUsuarioClases")]

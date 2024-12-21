@@ -1,5 +1,42 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<Proyecto_WEB.Models.Clase>
+
 @{
+    ViewData["Title"] = "Clases";
 }
+
+<h2>Mis clases</h2>
+
+@if (ViewBag.Error != null)
+{
+    <h1>@ViewBag.Error</h1>
+}
+@{
+    if (ViewBag.Mensaje != null)
+    {
+        <div class="alert alert-secondary text-center pt-2">@ViewBag.Mensaje</div>
+    }
+}
+<div class="row">
+    @foreach (var clase in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-80">
+                <div class="card-body">
+                    <h4 class="card-title">@clase.Nombre</h4>
+                    <h5>Entrenador Encargado: @clase.Entrenador</h5>
+                    <p class="card-text">
+                        Duración: @clase.Duracion min<br />
+                        Horario: @clase.Horario<br />
+                        Descripción: @clase.Descripcion
+                    </p>
+
+                    <form action="@Url.Action("EliminarReserva", "Clase")" method="post">
+                        <input type="hidden" name="claseId" value="@clase.ClaseID" />
+                        <button type="submit" class="btn btn-danger">Quitar reserva</button>
+                    </form>
+                   
+                </div>
+            </div>
+        </div>
+    }
+</div>

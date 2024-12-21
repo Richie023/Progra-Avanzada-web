@@ -30,6 +30,7 @@ namespace Proyecto_WEB.Controllers
 
                 if (result != null && result.Codigo == 0)
                 {
+                    
                     var datosContenido = JsonSerializer.Deserialize<List<Clase>>((JsonElement)result.Contenido!);
                     return View(datosContenido);
                 }
@@ -62,7 +63,8 @@ namespace Proyecto_WEB.Controllers
 
                 if (result != null && result.Codigo == 0)
                 {
-                    return RedirectToAction("Index", "Clase");
+                    ViewBag.Mensaje = "Registrado en la clase!";
+                    return RedirectToAction("ClasesUsuario", "Clase");
                 }
                 else
                 {
@@ -78,7 +80,7 @@ namespace Proyecto_WEB.Controllers
             using (var client = _http.CreateClient())
             {
                 var UsuarioID = long.Parse(HttpContext.Session.GetString("Consecutivo")!.ToString());
-                string url = _conf.GetSection("Variables:UrlApi").Value + "Clase/ConsultarUsuarioClases?UsuarioID=";
+                string url = _conf.GetSection("Variables:UrlApi").Value + "Clase/ConsultarUsuarioClases?UsuarioID=" + UsuarioID;
 
                 var response = client.GetAsync(url).Result;
                 var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;
@@ -105,6 +107,42 @@ namespace Proyecto_WEB.Controllers
 
                 ViewBag.Mensaje = "No se pudo obtener la información de clases";
                 return View(new List<Clase>());
+            }
+        }
+        [HttpPost]
+        public IActionResult EliminarReserva(int claseId)
+        {
+            if (HttpContext.Session.GetString("Consecutivo") == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            using (var client = _http.CreateClient())
+            {   
+                var UsuarioID = long.Parse(HttpContext.Session.GetString("Consecutivo")!.ToString());
+                var url = _conf.GetSection("Variables:UrlApi").Value + "Clase/EliminarReservaClase";
+                
+
+                var miembroClase = new MiembroClase
+                {
+                    ClaseID = claseId,
+                    UsuarioID = UsuarioID
+                };
+
+                JsonContent datos = JsonContent.Create(miembroClase);
+                var response = client.PostAsync(url, datos).Result;
+                var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;
+
+                if (result != null && result.Codigo == 0)
+                {
+                    ViewBag.Mensaje = "Reserva eliminada exitosamente.";
+                    return RedirectToAction("ClasesUsuario", "Clase");
+                }
+                else
+                {
+                    ViewBag.Error = result!.Mensaje;
+                    return View("ClasesUsuario", "Clase");
+                }
             }
         }
 

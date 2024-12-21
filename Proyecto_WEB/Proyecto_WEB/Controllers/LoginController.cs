@@ -119,7 +119,7 @@ namespace Proyecto_WEB.Controllers
             {
                 var url = _conf.GetSection("Variables:UrlApi").Value + "Login/RecuperarAcceso";
 
-                JsonContent datos = JsonContent.Create(model.Email);
+                JsonContent datos = JsonContent.Create(model);
 
                 var response = client.PostAsync(url, datos).Result;
                 var result = response.Content.ReadFromJsonAsync<Respuesta>().Result;

@@ -234,4 +234,14 @@ INSERT INTO Clases
 VALUES 
       ('Yoga', 'Clase de yoga para todos los niveles', 60, GETDATE(), 1);
 GO
+
+INSERT INTO Clases
+      (Nombre
+      ,Descripcion
+      ,Duracion
+      ,Horario
+      ,EmpleadoID)
+VALUES 
+      ('Clase2', 'Clase de ejemplo', 60, GETDATE(), 1);
+GO
 --Cambiar ID a 1
