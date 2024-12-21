@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Proyecto_WEB.Models.Empleado>
+﻿@* @model IEnumerable<Proyecto_WEB.Models.Empleado>
 @{
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -30,11 +30,11 @@ else
                 <tr>
                     <td>@empleado.Nombre</td>
                     <td>@empleado.Apellidos</td>
-                    <td>@empleado.FechaNacimiento?.ToShortDateString() ?? "N/A"</td>
+                    <td>@empleado.FechaNacimiento.ToShortDateString() ?? "N/A"</td>
                     <td>@empleado.Telefono</td>
                     <td>@empleado.Email</td>
                     <td>@empleado.Direccion</td>
-                    <td>@empleado.FechaContratacion?.ToShortDateString() ?? "N/A"</td>
+                    <td>@empleado.FechaContratacion.ToShortDateString() ?? "N/A"</td>
                     <td>@empleado.CargoID</td>
                     <td>@empleado.UsuarioID</td>
                 </tr>
@@ -42,3 +42,4 @@ else
         </tbody>
     </table>
 }
+ *@

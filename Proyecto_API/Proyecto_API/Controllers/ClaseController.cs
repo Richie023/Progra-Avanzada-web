@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Proyecto_API.Models;
 using Microsoft.Data.SqlClient;
 using Dapper;
+using System.Data;
 
 namespace Proyecto_API.Controllers
 {
@@ -16,6 +17,54 @@ namespace Proyecto_API.Controllers
         public ClaseController(IConfiguration conf)
         {
             _conf = conf;
+        }
+        [HttpPost]
+        [Route("RegistrarMiembroEnClase")]
+        public IActionResult RegistrarMiembroEnClase( MiembroClase miembroClase)
+        {
+            using (var connection = new SqlConnection(_conf.GetSection("ConnectionStrings:DefaultConnection").Value))
+            {
+                var respuesta = new Respuesta();
+
+                try
+                {
+                    connection.Open();
+
+                    var miembro = connection.QueryFirstOrDefault<Miembro>("ConsultarMiembro",new { UsuarioID = miembroClase.UsuarioID });
+
+                    if (miembro != null)
+                    {
+                        var result = connection.Execute("RegistrarMiembroEnClase",new { ClaseID = miembroClase.ClaseID, MiembroID = miembro.MiembroID });
+
+                        if (result > 0)
+                        {
+                            respuesta.Codigo = 0;
+                            respuesta.Mensaje = "Miembro registrado en la clase exitosamente.";
+                        }
+                        else
+                        {
+                            respuesta.Codigo = -1;
+                            respuesta.Mensaje = "Error al registrar el miembro en la clase.";
+                        }
+                    }
+                    else
+                    {
+                        respuesta.Codigo = -1;
+                        respuesta.Mensaje = "Miembro no encontrado.";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    respuesta.Codigo = -1;
+                    respuesta.Mensaje = $"Ocurrió un error: {ex.Message}";
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
+                return Ok(respuesta);
+            }
         }
 
         [HttpGet]

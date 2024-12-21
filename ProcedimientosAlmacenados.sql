@@ -9,7 +9,7 @@ CREATE PROCEDURE [dbo].[CrearCliente]
     @FechaNacimiento DATETIME,
     @Genero CHAR(1),
     @Telefono INT,
-    @Email VARCHAR(20) = NULL,
+    @Email VARCHAR(255) = NULL,
     @Direccion VARCHAR(255) = NULL
 AS
 BEGIN
@@ -149,6 +149,15 @@ BEGIN
 			Vigencia = @Vigencia
 	WHERE	UsuarioID = @UsuarioID
 
+END
+GO
+CREATE PROCEDURE [dbo].[RegistrarMiembroEnClase]
+	@ClaseID int,
+	@MiembroID bigint
+AS
+BEGIN
+	INSERT INTO MiembroClase (ClaseID,MiembroID)
+	VALUES (@ClaseID , @MiembroID)
 END
 GO
 
